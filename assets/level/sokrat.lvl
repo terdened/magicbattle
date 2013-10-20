@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="720" height="1280">   
+    <entity x="200" y="320" rotation="200" type="enemy" element="wind" value="enemy" name="sokrat"/>
+    <entity x="400" y="320" rotation="400" type="enemy" element="wind" value="enemy" name="platon"/>
+    <entity x="600" y="320" rotation="600" type="enemy" element="wind" value="enemy" name="aristotel"/>
+    <entity x="400" y="960" rotation="0" type="player" value="player"/>
+</level>

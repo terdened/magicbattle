@@ -1,0 +1,8 @@
+<magicConfig>
+	<element value="fire" />
+	<magic value="buf" type="damage" power="30" time="300" cost="30" />
+	<magic value="debuf" type="health" power="-0.1" time="300" cost="30" />
+	<magic value="bulet" power="35"  cost="35" />
+	<magic value="wall" power="100"  cost="20" />
+	<magic value="element" power="1"  cost="400" />
+</magicConfig>

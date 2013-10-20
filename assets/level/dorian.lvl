@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="720" height="1280">
+	<entity x="296" y="320" rotation="200" type="enemy" element="wind" value="enemy" name="dorian"/>   
+	<entity x="296" y="10" rotation="200" type="enemy" element="wind" value="enemy" name="picture"/>
+    <entity x="400" y="960" rotation="0" type="player" value="player"/>    
+</level>

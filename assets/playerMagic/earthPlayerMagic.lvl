@@ -1,0 +1,8 @@
+<magicConfig>
+	<element value="earth" />
+	<magic value="buf" type="health" power="0.03" time="5000" cost="80" />
+	<magic value="debuf" type="speed" power="-0.5" time="5000" cost="80" />
+	<magic value="bulet" power="30"  cost="30" />
+	<magic value="wall" power="150"  cost="25" />
+	<magic value="element" power="1"  cost="400" />
+</magicConfig>

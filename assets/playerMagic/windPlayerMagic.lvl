@@ -1,0 +1,8 @@
+<magicConfig>
+	<element value="wind" />
+	<magic value="buf" type="speed" power="2" time="300" cost="30" />
+	<magic value="debuf" type="damage" power="-10" time="300" cost="30" />
+	<magic value="bulet" power="15"  cost="30" />
+	<magic value="wall" power="100"  cost="7" />
+	<magic value="element" power="1"  cost="2000" />
+</magicConfig>

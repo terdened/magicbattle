@@ -1,0 +1,13 @@
+<ai>
+	<receptor id="1">isDamage</receptor>
+	<reflector action="stay">
+			<k value="1"/>
+			<k value="1"/>
+			<k value="1"/>
+			<k value="1"/>
+			<k value="1"/>
+			<receptork id="1" action="stay"/>
+	</reflector>
+	<memory size="50"/>
+	<node type="random" x="800" y="1280" minX="0" minY="0"/>	
+</ai>	
