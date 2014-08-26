@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.magickbattle.level.Level;
 import com.magickbattle.level.StoneLevelObject;
+import com.magickbattle.level.WholeLevelObject;
 
 public class GameSceneLoader {
 	private GameScene sceneHolder;
@@ -87,6 +88,24 @@ public class GameSceneLoader {
 	            	StoneLevelObject object = new StoneLevelObject(x, y,
 	            			sceneHolder.resourcesManager.stone_region, sceneHolder.vbom);
 	            	
+	            	sceneHolder.mLevel.attachObject(object);
+	            	
+	                FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+                	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+                	Body objectBody;
+                	objectBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, object, 
+                			BodyType.StaticBody, FIXTURE_DEF);
+                	objectBody.setUserData("object");
+                	sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(object, 
+                			objectBody, true, false));
+	            }
+	            else
+            	if(type.equals("whole"))
+	            {
+	            	WholeLevelObject object = new WholeLevelObject(x, y, 
+	            			sceneHolder.resourcesManager.whole_region, sceneHolder.vbom);
+	            	
+	            	object.InitWhole(value);
 	            	sceneHolder.mLevel.attachObject(object);
 	            	
 	                FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
@@ -164,9 +183,11 @@ public class GameSceneLoader {
 	                    	}
 	                    	
 	                    	if(effects.size()==0)
-		               			 effects.add(new Effect(10,  140,  power,  time, effect_Texture, sceneHolder.vbom,tempEffectAnimation, type));
+		               			 effects.add(new Effect(10,  140,  power,  time, 
+		               					 effect_Texture, sceneHolder.vbom,tempEffectAnimation, type));
 		               		 else
-		               			 effects.add(new Effect(effects.getLast().getX()+40,  140,  power,  time, effect_Texture, sceneHolder.vbom,tempEffectAnimation, type));
+		               			 effects.add(new Effect(effects.getLast().getX()+40,  140,  power,  
+		               					 time, effect_Texture, sceneHolder.vbom,tempEffectAnimation, type));
 	                    	
 	                    	if((type.equals("speed"))&&(power<0))
 	                    	{
@@ -216,7 +237,8 @@ public class GameSceneLoader {
 	                        {
 	                        	if(sceneHolder.touchPlayer)
 	                        	{
-	                        		this.setBuf(this.playerMagic.bufPower, this.playerMagic.bufTime, this.playerMagic.bufType);
+	                        		this.setBuf(this.playerMagic.bufPower, 
+	                        				this.playerMagic.bufTime, this.playerMagic.bufType);
 	                        	}
 	                        	sceneHolder.freePlayer=true;
 	                        	sceneHolder.touchPlayer=false;
@@ -225,7 +247,8 @@ public class GameSceneLoader {
 	                    };
 	                    
 	                };
-	                sceneHolder.player.createShadow(sceneHolder.vbom, sceneHolder.resourcesManager.dark_shadow);
+	                sceneHolder.player.createShadow(sceneHolder.vbom, 
+	                		sceneHolder.resourcesManager.dark_shadow);
 	                levelObject = sceneHolder.player;
 	                sceneHolder.playerStatus=new PlayerStatus(sceneHolder.player.getWidth(),
 	                		sceneHolder, sceneHolder.player);
@@ -240,7 +263,8 @@ public class GameSceneLoader {
 		            final String element = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_ELEMENT);
 		            final String name = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_NAME);	
 	            	
-	                Enemy enemy = new Enemy(sceneHolder,x*80, y*80, sceneHolder.vbom, sceneHolder.camera, sceneHolder.physicsWorld, player_region )
+	                Enemy enemy = new Enemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+	                		sceneHolder.camera, sceneHolder.physicsWorld, player_region )
 	                {
 	                    @Override
 	                    public void onDie()

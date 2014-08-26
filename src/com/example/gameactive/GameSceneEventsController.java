@@ -266,7 +266,7 @@ public class GameSceneEventsController {
 		            			sceneHolder.buletCount--;
 		            		}
 		            		else
-		            		if((sceneHolder.bulet.get(i).getY()<-20)||(sceneHolder.bulet.get(i).getY()>1300))
+		            		if((sceneHolder.bulet.get(i).getY()<-20)||(sceneHolder.bulet.get(i).getY()>sceneHolder.mLevel.getHeight()))
 		            		{
 		            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
 		            			sceneHolder.bulet.remove(i);

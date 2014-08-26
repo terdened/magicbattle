@@ -121,6 +121,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private void loadLevel(int levelID)
 	{
 		gameSceneLoader.loadLevel(levelID);
+		int a=0;
 	}
 
     @Override

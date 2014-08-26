@@ -246,11 +246,10 @@ public class ResourcesManager
 		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
 		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
 		}
-	    if(level.equals("haron"))
+	    if(level.equals("2"))
 	    {
-	    	//river_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/river.png");
-	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Haron.png", 6, 3);	
+	    	enemys_regions=new ITiledTextureRegion[1];
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
 	    	
 	    	mobs_regions = new ITiledTextureRegion[1];
 	    	mobs_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "mobs/Soul.png", 4, 5);	
@@ -265,6 +264,7 @@ public class ResourcesManager
 		}
 	    gamebkg_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/"+level+"Background.png");
 	    stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
+	    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/whole.png", 4, 3); 
 	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
 	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
 	    

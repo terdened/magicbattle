@@ -62,5 +62,15 @@ public class Level extends Entity{
 		mObjectsList.add(pObject);
 		mMiddleLayer.attachChild(pObject);
 	}
+	
+	public float getWidth()
+	{
+		return mWidth*80;
+	}
+	
+	public float getHeight()
+	{
+		return mHeight*80;
+	}
 
 }

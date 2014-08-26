@@ -152,7 +152,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	
     	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.sokrat_region, vbom, "1",this);
-    	scrollMenu.getCirclesList().getLast().addButton(0, 800, resourcesManager.haron_region, vbom, "haron",this);
+    	scrollMenu.getCirclesList().getLast().addButton(0, 800, resourcesManager.haron_region, vbom, "2",this);
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
