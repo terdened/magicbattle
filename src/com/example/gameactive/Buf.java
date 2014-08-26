@@ -1,69 +1,79 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.gameactive;
-
-import java.util.LinkedList;
-
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
 import com.badlogic.gdx.math.Vector2;
 
+/*
+ * Buf spell
+ * Don't use in current version
+ * @author Denis Terehin
+ */
 public class Buf extends Bulet 
 {
+	private float mPower;
+	private long mTime;
+	private String mType;
 
-	public float power;
-	public long time;
-	public String type;
-	
-	
-	public Buf(float power, long time, String type)
+	public Buf(ITextureRegion pTextureRegion, GameScene scene, float power,	long time, String type)
 	{
-		this.power=power;
-		this.time=time;
-		this.type=type;
-		isInit=false;
-		isRemove=false;
+		super(pTextureRegion, 0, "", scene);
+		this.mPower=power;
+		this.mTime=time;
+		this.mType=type;
+		mIsInit=false;
+		mIsRemove=false;
 	}
 	
-	public void loadBulet(ITextureRegion player_bulet_region, VertexBufferObjectManager vbom, final LinkedList<Wall> walls, final Player player, final Enemy enemy)
+	@Override
+    protected void onManagedUpdate(float pSecondsElapsed) 
     {
-		player_bulet = new Sprite(0, 0, player_bulet_region, vbom)
-		{
-            @Override
-            protected void onManagedUpdate(float pSecondsElapsed) 
-            {
-                super.onManagedUpdate(pSecondsElapsed);
-                int l=walls.size();
-                for(int i=0; i<l;i++)
-                {                
-	                if (walls.get(i).wallTexture.collidesWith(this))
-	                {	                	
-	                	if(walls.get(i).element!="wind")
-	                	{
-	                		isRemove=true;
-	                	}else
-	                	{
-	                		Vector2 vecA= new Vector2(speedX,speedY);
-	                		Vector2 vecB= new Vector2((float)Math.cos((double)walls.get(i).wallTexture.getRotation()),(float)Math.sin((double)walls.get(i).wallTexture.getRotation()));
-	                		Vector2 vecC=vecA.add(vecB);
-	                		speedX=vecC.x;
-	                		speedY=vecC.y;
-	                	}
-	                }
-	                
-	                
-                }
-                if (player.collidesWith(this))
-                {
-                	player.setBuf(power, time, type);
-                	isRemove=true;
-                }
-                if (enemy.collidesWith(this))
-                {
-                	enemy.setBuf(power, time, type);
-                	isRemove=true;
-                }
+        super.onManagedUpdate(pSecondsElapsed);
+        int l=mScene.wall.size();
+        for(int i=0; i<l;i++)
+        {                
+            if (mScene.wall.get(i).collidesWith(this))
+            {	                	
+            	if(mScene.wall.get(i).getElement()!="wind")
+            	{
+            		mIsRemove=true;
+            	}else
+            	{
+            		Vector2 vecA= new Vector2(mSpeedX,mSpeedY);
+            		Vector2 vecB= new Vector2((float)Math.cos((double)mScene.wall.get(i).getRotation()),(float)Math.sin((double)mScene.wall.get(i).getRotation()));
+            		Vector2 vecC=vecA.add(vecB);
+            		mSpeedX=vecC.x;
+            		mSpeedY=vecC.y;
+            	}
             }
-        };
+            
+            
+        }
+        if (mScene.player.collidesWith(this))
+        {
+        	mScene.player.setBuf(mPower, mTime, mType);
+        	mIsRemove=true;
+        }
+        
+        for(int i=0;i<mScene.enemyList.size();i++)
+            if (mScene.enemyList.get(i).collidesWith(this))
+            {
+            	mScene.enemyList.get(i).setBuf(mPower, mTime, mType);
+            	mIsRemove=true;
+            }
     }
 }

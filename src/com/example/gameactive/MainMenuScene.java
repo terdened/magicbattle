@@ -1,20 +1,14 @@
 package com.example.gameactive;
 
-import org.andengine.engine.camera.Camera;
+
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.opengl.util.GLState;
 import org.andengine.util.color.Color;
-
-
-import android.opengl.GLES20;
-
 import com.example.gameactive.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
@@ -71,11 +65,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	    
 	    setChildScene(menuChildScene);
 	}
-
-    private void createBackground()
-    {
-    	
-    }
     
     @Override
     public void onBackKeyPressed()

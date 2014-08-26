@@ -11,11 +11,11 @@ public class GameState {
 	public List<Enemy> enemyList;
 	public PlayerMagic playerMagic;
 	public Player player;
-	
+	public LinkedList<Mob> mobList;
 	public int time;
 	public String action;
 	
-	public GameState(PlayerMagic playerMagic, Enemy enemy, LinkedList<Bulet> bulet,LinkedList<Wall> walls, Player player, List<Enemy> enemyList)
+	public GameState(LinkedList<Mob> mobList,PlayerMagic playerMagic, Enemy enemy, LinkedList<Bulet> bulet,LinkedList<Wall> walls, Player player, List<Enemy> enemyList)
 	{
 		this.playerMagic=playerMagic;
 		this.bulet=bulet;
@@ -24,6 +24,7 @@ public class GameState {
 		this.time=0;
 		this.player=player;
 		this.enemyList=enemyList;
+		this.mobList=mobList;
 	}
 	
 	public void setAction(String action)

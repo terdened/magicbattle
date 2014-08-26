@@ -1,11 +1,24 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
 
 
 import java.util.LinkedList;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -19,23 +32,23 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-//import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
-
 import android.graphics.Color;
-
 import com.example.gameactive.GameActivity;
 
-
+/*
+ * Control loading and destroing resources
+ * @author Denis Terehin
+ */
 public class ResourcesManager
 {
-    //---------------------------------------------
-    // VARIABLES
-    //---------------------------------------------
-    
-	public ITextureRegion splash_region;
-	private BitmapTextureAtlas splashTextureAtlas;	
+	private BitmapTextureAtlas mSplashTextureAtlas;
+	private BuildableBitmapTextureAtlas mMenuTextureAtlas;
+	private BuildableBitmapTextureAtlas mGameTextureAtlas;
+    private static final ResourcesManager INSTANCE = new ResourcesManager();
+	private BuildableBitmapTextureAtlas playerMenuTextureAtlas;
 	
+	public ITextureRegion splash_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
 	public ITextureRegion limb_region;
@@ -43,14 +56,11 @@ public class ResourcesManager
 	public ITextureRegion haron_region;
 	public ITextureRegion veider_region;
 	public ITextureRegion dorian_region;
-	private BuildableBitmapTextureAtlas menuTextureAtlas;
-	
 	public ITextureRegion base_region;
 	public ITextureRegion knob_region;
 	public ITiledTextureRegion player_region;
-	
 	public ITiledTextureRegion enemys_regions[];
-	
+	public ITiledTextureRegion mobs_regions[];
 	public ITiledTextureRegion enemy_region;
 	public ITextureRegion enemy_bulet_region;
 	public ITextureRegion enemy_buf_region;
@@ -58,7 +68,6 @@ public class ResourcesManager
 	public ITiledTextureRegion enemy_wall_region;
 	public ITiledTextureRegion enemyBuletTail;
 	public ITiledTextureRegion enemyElementMagic;
-	
 	public ITiledTextureRegion rain;
 	public ITiledTextureRegion playerBuletTail;
 	public ITiledTextureRegion player_region_water;
@@ -70,10 +79,11 @@ public class ResourcesManager
 	public ITiledTextureRegion speedUpBuf;
 	public ITiledTextureRegion speedDownBuf;
 	public ITextureRegion gamebkg_region;
-	
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
 	public ITextureRegion river_region;
-	
+	public ITiledTextureRegion stone_region;
+	public ITiledTextureRegion whole_region;
+	public ITextureRegion edge_region;
 	public ITextureRegion player_bulet_region;
 	public ITextureRegion player_buf_region;
 	public ITextureRegion player_debuf_region;
@@ -89,23 +99,15 @@ public class ResourcesManager
 	public ITextureRegion speedMinusIcon;
 	public ITextureRegion healthLine;
 	public ITextureRegion manaLine;
-	
 	public ITextureRegion fireElementButton;
 	public ITextureRegion waterElementButton;
 	public ITextureRegion earthElementButton;
 	public ITextureRegion windElementButton;
 	public ITextureRegion backButton;
-	private BuildableBitmapTextureAtlas playerMenuTextureAtlas;
-	
-	private BuildableBitmapTextureAtlas gameTextureAtlas;
-	
-    private static final ResourcesManager INSTANCE = new ResourcesManager();
-    
     public Engine engine;
     public GameActivity activity;
     public BoundCamera camera;
     public VertexBufferObjectManager vbom;
-    
     public Font font;
     
     //---------------------------------------------
@@ -144,15 +146,15 @@ public class ResourcesManager
     private void loadMenuGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
-    	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
-    	options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
+    	mMenuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+    	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "play.png");
+    	options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "options.png");
     	
     	
     	try 
     	{
-    	    this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-    	    this.menuTextureAtlas.load();
+    	    this.mMenuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.mMenuTextureAtlas.load();
     	} 
     	catch (final TextureAtlasBuilderException e)
     	{
@@ -169,139 +171,127 @@ public class ResourcesManager
     private void loadGameGraphics(String element, String level)
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-	    gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+	    mGameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
 	    	   
 	    objectsList=new LinkedList <ITextureRegion>();
 	    
-	    player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/playerWater.png", 8, 1);
+	    player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 8, 1);
+	    edge_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
 	    if(element=="water")
 	    {
-	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/playerWater.png", 8, 1);
-	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_bulet.png");
-		    player_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_buf.png");
-		    player_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_debuf.png");
-		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
-		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/waterTail.png", 8, 1);   
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1);   
 	    }
 	    if(element=="fire")
 	    {
-	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/playerFire.png", 8, 1);
-	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/fire_bulet.png");
-		    player_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/fire_buf.png");
-		    player_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/fire_debuf.png");
-		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/earthWall.png", 8, 1);
-		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/fireTail.png", 8, 1);
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerFire.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/fire_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/fireWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/fireTail.png", 8, 1);
 	    }
 	    if(element=="earth")
 	    {
-	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/playerEarth.png", 8, 1);
-	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/earth_bulet.png");
-		    player_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/earth_buf.png");
-		    player_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/earth_debuf.png");
-		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/earthWall.png", 8, 1);
-		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/fireTail.png", 8, 1);
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerEarth.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/earth_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/earthWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/earthTail.png", 8, 1);
 	    }
 	    if(element=="wind")
 	    {
-	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/playerWind.png", 8, 1);
-	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/wind_bulet.png");
-		    player_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/wind_buf.png");
-		    player_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/wind_debuf.png");
-		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/windWall.png", 8, 1);
-		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/fireTail.png", 8, 1);
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWind.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/wind_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/windWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/windTail.png", 8, 1);
 	    }
 	    
 	    
 	    if(level.equals("veider"))
 	    {
-	    	river_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/river.png");
+	    	river_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
 		    //objectsList.add(river_region);
 		    //objectsList.getFirst()=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/river.png");
 	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/DarthVader.png", 8, 1);	
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/DarthVader.png", 8, 1);	
 	    	
 		    //enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/DarthVader.png", 8, 1);	
-			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_bulet.png");  
-			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_buf.png");  
-			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_debuf.png");
-			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
-		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
-		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");  
+			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_buf.png");  
+			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_debuf.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
 		}
-	    if(level.equals("sokrat"))
+	    if(level.equals("1"))
 	    {
 	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
-	    	enemys_regions[1]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Platon.png", 8, 1);	
-	    	enemys_regions[2]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Arhimed.png", 8, 1);	
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Sokrat.png", 6, 3);	
+	    	enemys_regions[1]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
+	    	enemys_regions[2]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
 	    	
-		    //enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
-			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_bulet.png");  
-			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_buf.png");  
-			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_debuf.png");
-			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
-		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
-		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		    enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
 		}
 	    if(level.equals("dorian"))
 	    {
 	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Dorian.png", 8, 1);	
-	    	enemys_regions[1]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/DoriansPicture.png", 1, 1);	
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Dorian.png", 6, 3);	
+	    	enemys_regions[1]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/DoriansPicture.png", 1, 1);	
 	    	
 	    	
-		    enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
-			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_bulet.png");  
-			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_buf.png");  
-			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_debuf.png");
-			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
-		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
-		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		    enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
 		}
 	    if(level.equals("haron"))
 	    {
 	    	//river_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/river.png");
 	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Haron.png", 8, 1);	
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Haron.png", 6, 3);	
 	    	
-	    	ITextureRegion edge=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/edge.png");
+	    	mobs_regions = new ITiledTextureRegion[1];
+	    	mobs_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "mobs/Soul.png", 4, 5);	
+	    	
+	    	ITextureRegion edge=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
 		    objectsList.add(edge);
 		    //enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Haron.png", 8, 1);	
-			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_bulet.png");  
-			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_buf.png");  
-			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "magics/water_debuf.png");
-			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
-		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
-		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
 		}
-	    gamebkg_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "levels/"+level+"Background.png");
-
-	    rain=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/rain.png", 8, 1);
-	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/shadow.png", 8, 1);
-	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
+	    gamebkg_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/"+level+"Background.png");
+	    stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
+	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
+	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
 	    
-	    speedDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/speedDownBuf.png", 8, 1);
-	    speedUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/speedUpBuf.png", 8, 1);
-	    healthDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/healthDownBuf.png", 8, 1);
-	    healthUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "effects/healthUpBuf.png", 8, 1);
+	    speedDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/speedDownBuf.png", 8, 1);
+	    speedUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/speedUpBuf.png", 8, 1);
+	    healthDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/healthDownBuf.png", 8, 1);
+	    healthUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/healthUpBuf.png", 8, 1);
 	    
-	    manaLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/manaLine.png");
-	    healthLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/healthLine.png");
-	    healthPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/healthPlusIcon.png");
-		healthMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/healthMinusIcon.png");
-		speedPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/speedPlusIcon.png");
-		speedMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "icons/speedMinusIcon.png");
+	    manaLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/manaLine.png");
+	    healthLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthLine.png");
+	    healthPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthPlusIcon.png");
+		healthMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthMinusIcon.png");
+		speedPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/speedPlusIcon.png");
+		speedMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/speedMinusIcon.png");
 	   	    
-	    bulet_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "icons/buleticon.png", 2, 1);
-		wall_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "icons/wallicon.png", 2, 1);
-		nature_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "icons/natureicon.png", 2, 1);
-		buf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "icons/buficon.png", 2, 1);
-		debuf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "icons/debuficon.png", 2, 1);
+	    bulet_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/buleticon.png", 2, 1);
+		wall_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/wallicon.png", 2, 1);
+		nature_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/natureicon.png", 2, 1);
+		buf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/buficon.png", 2, 1);
+		debuf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/debuficon.png", 2, 1);
 		 
 	    try 
 	    {
-	        this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
-	        this.gameTextureAtlas.load();
+	        this.mGameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+	        this.mGameTextureAtlas.load();
 	    } 
  	    catch (final TextureAtlasBuilderException e)
 	    {
@@ -340,17 +330,15 @@ public class ResourcesManager
     
     public void loadSplashScreen()
     {
-    
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-    	splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash.png", 0, 0);
-    	splashTextureAtlas.load();
-    	
+    	mSplashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+    	splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mSplashTextureAtlas, activity, "splash.png", 0, 0);
+    	mSplashTextureAtlas.load();
     }
     
     public void unloadSplashScreen()
     {
-    	splashTextureAtlas.unload();
+    	mSplashTextureAtlas.unload();
     	splash_region = null;
     }
     

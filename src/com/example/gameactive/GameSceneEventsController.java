@@ -34,7 +34,7 @@ public class GameSceneEventsController {
     		
     		if((sceneHolder.touchPlayer)||(sceneHolder.player.touchPlayerShadow))
     		{
-    			sceneHolder.weather.setFingerMagic(sceneHolder.playerMagic.element, pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), sceneHolder.vbom);
+    			sceneHolder.weather.setFingerMagic(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
     		}
     		else
         	{
@@ -53,23 +53,23 @@ public class GameSceneEventsController {
 		        				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
 				        		
 				        		Body tempBody;
-				        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast().wallTexture, BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
+				        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast(), BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
 				        		tempBody.setUserData("wall");
 				        		sceneHolder.wall.getLast().initBody(tempBody);
 				        		
-				        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast().wallTexture, sceneHolder.wall.getLast().wallBody, true, false));
+				        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast(), sceneHolder.wall.getLast().getWallBody(), true, false));
 		        			}
 		        			
 		        			if((sceneHolder.xLastWall-pSceneTouchEvent.getX())!=0)
 			       			 {
 			       				 
 			       				 if(pSceneTouchEvent.getX()-sceneHolder.xLastWall>0)	
-			       					sceneHolder.wall.getLast().wallTexture.setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
+			       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
 			       				 else
-			       					sceneHolder.wall.getLast().wallTexture.setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
+			       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
 			       			 }	
 			                
-		        			sceneHolder.attachChild(sceneHolder.wall.getLast().wallTexture);
+		        			sceneHolder.attachChild(sceneHolder.wall.getLast());
 			        		sceneHolder.xLastWall=pSceneTouchEvent.getX();
 			        		sceneHolder.yLastWall=pSceneTouchEvent.getY();
 		        		}
@@ -92,7 +92,7 @@ public class GameSceneEventsController {
         	
         	if((Math.abs(sceneHolder.startX-pSceneTouchEvent.getX())<5)&&(Math.abs(sceneHolder.startY-pSceneTouchEvent.getY())<5))
         	{
-        		sceneHolder.player.setDist(sceneHolder.startX, sceneHolder.startY);
+        		sceneHolder.player.setDest(sceneHolder.startX, sceneHolder.startY);
         	}
         	else
         	if(((sceneHolder.touchPlayer)||(sceneHolder.player.touchPlayerShadow))&&(choosenMagic==1))
@@ -100,11 +100,10 @@ public class GameSceneEventsController {
         		float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.buletCost);
         		if(manaK>0.3)
         		{
-        			sceneHolder.bulet.add(new Bulet(sceneHolder.player.getDamage()*manaK,sceneHolder.playerMagic.element));
+        			sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_bulet_region,sceneHolder.player.getDamage(),sceneHolder.playerMagic.element, sceneHolder));
         			sceneHolder.bulet.getLast().init(sceneHolder.lastX,sceneHolder.lastY,sceneHolder.lastTapTime);
-        			sceneHolder.bulet.getLast().loadBulet(sceneHolder.resourcesManager.player_bulet_region, sceneHolder.vbom, sceneHolder.wall, sceneHolder.player, sceneHolder.enemyList);
         			sceneHolder.bulet.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime()+10);
-        			sceneHolder.attachChild(sceneHolder.bulet.getLast().player_bulet);
+        			sceneHolder.attachChild(sceneHolder.bulet.getLast());
         			sceneHolder.bulet.getLast().createShadow(sceneHolder.vbom, sceneHolder.resourcesManager.light_shadow);
         			sceneHolder.buletCount++;
         		}
@@ -138,11 +137,10 @@ public class GameSceneEventsController {
 	       		if(manaK>0.3)
 	       		{
 	       			float tempTime=sceneHolder.playerMagic.bufTime*manaK;
-	       			sceneHolder.buf.add(new Buf(sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
+	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_buf_region,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
 	       			sceneHolder.buf.getLast().init(sceneHolder.startX,sceneHolder.startY,sceneHolder.startTapTime);
-	       			sceneHolder.buf.getLast().loadBulet(sceneHolder.resourcesManager.player_buf_region, sceneHolder.vbom, sceneHolder.wall, sceneHolder.player, sceneHolder.enemyList);
 	       			sceneHolder.buf.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime());
-	       			sceneHolder.attachChild(sceneHolder.buf.getLast().player_bulet);
+	       			sceneHolder.attachChild(sceneHolder.buf.getLast());
 	       			sceneHolder.bufCount++;
 	       		}
            }else
@@ -152,11 +150,10 @@ public class GameSceneEventsController {
 	       		if(manaK>0.3)
 	       		{
 	       			float tempTime=sceneHolder.playerMagic.debufTime*manaK;
-	       			sceneHolder.buf.add(new Buf(sceneHolder.playerMagic.debufPower*manaK, (long)tempTime, sceneHolder.playerMagic.debufType));
+	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_buf_region,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
 	       			sceneHolder.buf.getLast().init(sceneHolder.startX,sceneHolder.startY,sceneHolder.startTapTime);
-	       			sceneHolder.buf.getLast().loadBulet(sceneHolder.resourcesManager.player_debuf_region, sceneHolder.vbom, sceneHolder.wall, sceneHolder.player, sceneHolder.enemyList);
 	       			sceneHolder.buf.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime());
-	       			sceneHolder.attachChild(sceneHolder.buf.getLast().player_bulet);
+	       			sceneHolder.attachChild(sceneHolder.buf.getLast());
 	       			sceneHolder.bufCount++;
 	       		}
             }
@@ -180,13 +177,10 @@ public class GameSceneEventsController {
      
             @Override
             public void onUpdate(final float pSecondsElapsed) 
-            {
-            	
-            		
+            {            	
             		for(int i=0;i<sceneHolder.textList.size();i++)
             		{
-            			sceneHolder.textList.get(i).update();
-            			if(sceneHolder.textList.get(i).remain<=0)
+            			if(sceneHolder.textList.get(i).getRemain()<=0)
             			{
             				sceneHolder.detachChild(sceneHolder.textList.get(i));
             				sceneHolder.textList.remove(i);
@@ -196,23 +190,15 @@ public class GameSceneEventsController {
             		for(int i=0;i<sceneHolder.weather.walls.size();i++)
             		{
             			if(sceneHolder.weather.walls.get(i).isDestroy())
-            				sceneHolder.detachChild(sceneHolder.weather.walls.get(i).wallTexture);
+            				sceneHolder.detachChild(sceneHolder.weather.walls.get(i));
             		}
 
             		sceneHolder.weather.updateWeather(sceneHolder.vbom);
-            		
-            		//playerHealthText.setText("Health: " + player.health);
-            		//playerManaText.setText("Mana: " + player.manaPower);
-
-            	    //enemyHealthText.setText("Health: " + enemyList.get(0).health);
-            	    //enemyManaText.setText("Mana: " + enemyList.get(0).manaPower);
             	   
             		if(!sceneHolder.player.getIsDead())
             		{
-            			if(sceneHolder.player.health>0)
-            				sceneHolder.playerStatus.update(sceneHolder.player.getX(), sceneHolder.player.getY(), sceneHolder.player.health, sceneHolder.player.manaPower);
-            			else
-            				sceneHolder.playerStatus.update(sceneHolder.player.getX(), sceneHolder.player.getY(), 0, sceneHolder.player.manaPower);
+            			if(sceneHolder.player.health<=0)
+            				sceneHolder.detachChild(sceneHolder.playerStatus);
             			
             			if(sceneHolder.player.tempText.size()>0)
             			{
@@ -228,9 +214,7 @@ public class GameSceneEventsController {
             		
             		for(int i=0;i<sceneHolder.enemyList.size();i++)
             		{
-            			sceneHolder.enemyStatus.get(i).update(sceneHolder.enemyList.get(i).getX(), sceneHolder.enemyList.get(i).getY(), sceneHolder.enemyList.get(i).health, sceneHolder.enemyList.get(i).manaPower);
-            			
-            			if(!sceneHolder.enemyList.get(i).isDead)
+            			if(!sceneHolder.enemyList.get(i).getIsDead())
             			{
             				sceneHolder.enemyList.get(i).fillMana();
             				sceneHolder.enemyList.get(i).move();
@@ -241,7 +225,7 @@ public class GameSceneEventsController {
             	    
             	    for(int i=0;i<sceneHolder.enemyList.size();i++)
             	    {
-            	    	if(!sceneHolder.enemyList.get(i).isDead)
+            	    	if(!sceneHolder.enemyList.get(i).getIsDead())
             			{
             	    		
             	    		if(sceneHolder.enemyList.get(i).tempText.size()>0)
@@ -250,22 +234,14 @@ public class GameSceneEventsController {
                 				sceneHolder.enemyList.get(i).tempText=new LinkedList<TextInformHolder>();
                 			}
             	    		
-	            	    	GameState gameState=new GameState(sceneHolder.playerMagic,sceneHolder.enemyList.get(i),sceneHolder.bulet,sceneHolder.wall,sceneHolder.player,sceneHolder.enemyList);
-		            		String action=sceneHolder.enemyList.get(i).update(gameState);
-		            		if(action.equals("createWall"))
-		            			sceneHolder.gameSceneCreator.createWall(sceneHolder.enemyList.get(i).ai.getWallList(),sceneHolder.enemyList.get(i));
-		            		if(action.equals("createBulet"))
-		            			sceneHolder.gameSceneCreator.createBulet(sceneHolder.enemyList.get(i).ai.getBuletList(),sceneHolder.enemyList.get(i));
-		            		if(action.equals("attackPlayer"))
-		            			sceneHolder.gameSceneCreator.createBulet(sceneHolder.enemyList.get(i).ai.getBuletList(),sceneHolder.enemyList.get(i));
-		            		if(action.equals("createStormtrooper"))
-		            			sceneHolder.gameSceneCreator.createStormtrooper(sceneHolder.enemyList.get(i).ai.getObjectList());
+	            	    	GameState gameState=new GameState(sceneHolder.mobsList,sceneHolder.playerMagic,sceneHolder.enemyList.get(i),sceneHolder.bulet,sceneHolder.wall,sceneHolder.player,sceneHolder.enemyList);
+		            		sceneHolder.enemyList.get(i).update(gameState);
             			}
             	    	
 	            		if(sceneHolder.enemyList.get(i).getIsDead())
 	            		{
-	            			sceneHolder.detachChild(sceneHolder.enemyStatus.get(i).healthLine);
-	            			sceneHolder.detachChild(sceneHolder.enemyStatus.get(i).manaLine);
+	            			sceneHolder.detachChild(sceneHolder.enemyStatus.get(i).getHealthLine());
+	            			sceneHolder.detachChild(sceneHolder.enemyStatus.get(i).getManaLine());
 	            			sceneHolder.enemyStatus.remove(i);
 	            			
 	            			sceneHolder.detachChild(sceneHolder.enemyList.get(i));
@@ -273,34 +249,26 @@ public class GameSceneEventsController {
 	            		}            		
             	    }
             		
-            		for(int i=0;i<sceneHolder.weather.objects.size();i++)
-            		{
-            			if(sceneHolder.weather.objects.get(i).type.equals("stormtrooper"))
-            				if(sceneHolder.weather.objects.get(i).period==19)
-            					sceneHolder.gameSceneCreator.createBulet(sceneHolder.weather.objects.get(i).getBuletList(),sceneHolder.enemyList.getFirst());
-            		}
-            		
 	            	for(int i=0; i < sceneHolder.buletCount; i++)
 	            	{
-	            		if(sceneHolder.bulet.get(i).isRemove)
+	            		if(sceneHolder.bulet.get(i).mIsRemove)
 	            		{
-	            			sceneHolder.detachChild(sceneHolder.bulet.get(i).player_bulet);
+	            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
 	            			sceneHolder.bulet.remove(i);
 	            			sceneHolder.buletCount--;
 	            		}else
 	            		{
 	            			//weather.setTail(bulet.get(i).element, bulet.get(i).getX(), bulet.get(i).getY(), vbom, playerMagic.element, enemyMagic.element);
-	            			sceneHolder.bulet.get(i).update(sceneHolder.weather.getWind());
 		            		if((sceneHolder.bulet.get(i).getX()<-20)||(sceneHolder.bulet.get(i).getX()>820))
 		            		{
-		            			sceneHolder.detachChild(sceneHolder.bulet.get(i).player_bulet);
+		            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
 		            			sceneHolder.bulet.remove(i);
 		            			sceneHolder.buletCount--;
 		            		}
 		            		else
 		            		if((sceneHolder.bulet.get(i).getY()<-20)||(sceneHolder.bulet.get(i).getY()>1300))
 		            		{
-		            			sceneHolder.detachChild(sceneHolder.bulet.get(i).player_bulet);
+		            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
 		            			sceneHolder.bulet.remove(i);
 		            			sceneHolder.buletCount--;
 		            		}
@@ -309,25 +277,23 @@ public class GameSceneEventsController {
 	            	
 	            	for(int i=0; i < sceneHolder.bufCount; i++)
 	            	{
-	            		if(sceneHolder.buf.get(i).isRemove)
+	            		if(sceneHolder.buf.get(i).mIsRemove)
 	            		{
-	            			sceneHolder.detachChild(sceneHolder.buf.get(i).player_bulet);
+	            			sceneHolder.detachChild(sceneHolder.buf.get(i));
 	            			sceneHolder.buf.remove(i);
 	            			sceneHolder.bufCount--;
 	            		}else
 	            		{
-	            			
-	            			sceneHolder.buf.get(i).update(sceneHolder.weather.getWind());
 		            		if((sceneHolder.buf.get(i).getX()<-20)||(sceneHolder.buf.get(i).getX()>820))
 		            		{
-		            			sceneHolder.detachChild(sceneHolder.buf.get(i).player_bulet);
+		            			sceneHolder.detachChild(sceneHolder.buf.get(i));
 		            			sceneHolder.buf.remove(i);
 		            			sceneHolder.bufCount--;
 		            		}
 		            		else
 		            		if((sceneHolder.buf.get(i).getY()<-20)||(sceneHolder.buf.get(i).getY()>1300))
 		            		{
-		            			sceneHolder.detachChild(sceneHolder.buf.get(i).player_bulet);
+		            			sceneHolder.detachChild(sceneHolder.buf.get(i));
 		            			sceneHolder.buf.remove(i);
 		            			sceneHolder.bufCount--;
 		            		}
@@ -341,14 +307,14 @@ public class GameSceneEventsController {
 	            		
 	            		if(sceneHolder.wall.get(i).isDestroy())
 	            		{
-	            			if(sceneHolder.wall.get(i).isBodyInit)
+	            			if(sceneHolder.wall.get(i).getIsBodyInit())
 	            			{
-	            				PhysicsConnector tempConnector= sceneHolder.physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(sceneHolder.wall.get(i).wallTexture);
+	            				PhysicsConnector tempConnector= sceneHolder.physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(sceneHolder.wall.get(i));
 	            				sceneHolder.physicsWorld.unregisterPhysicsConnector(tempConnector);
-	            				sceneHolder.physicsWorld.destroyBody(sceneHolder.wall.get(i).wallBody);
+	            				sceneHolder.physicsWorld.destroyBody(sceneHolder.wall.get(i).getWallBody());
 	            			}
 	            			
-	            			sceneHolder.detachChild(sceneHolder.wall.get(i).wallTexture);
+	            			sceneHolder.detachChild(sceneHolder.wall.get(i));
 	            			sceneHolder.wall.remove(i);
 	            		}
 	            	}

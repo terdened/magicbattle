@@ -3,14 +3,11 @@ package com.example.gameactive;
 import java.io.IOException;
 
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.*;
-import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.engine.*;
 

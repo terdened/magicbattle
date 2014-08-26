@@ -1,23 +1,36 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
-
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+/*
+ * Magic bar it's bar with spells type
+ * Don't use in current version
+ * @author Denis Terehin
+ */
 public class MagicBar 
 {
-	private float X;
-	private float Y;
-	
-	private float iconHeight;
-
-	private float iconDistantion;
-	
-	private int choosenIcon;
+	private float mX;
+	private float mY;
+	private float mIconHeight;
+	private float mIconDistantion;
+	private int mChoosenIcon;
 	
 	public AnimatedSprite buletIcon;
 	public AnimatedSprite wallIcon;
@@ -27,11 +40,11 @@ public class MagicBar
 	
 	public MagicBar(float X, float Y, float iconHeight, float iconDistantion)
 	{
-		this.X=X;
-		this.Y=Y;
-		this.iconHeight=iconHeight;
-		this.iconDistantion=iconDistantion;
-		choosenIcon=1;
+		this.mX=X;
+		this.mY=Y;
+		this.mIconHeight=iconHeight;
+		this.mIconDistantion=iconDistantion;
+		mChoosenIcon=1;
 	}
 	
 	
@@ -39,7 +52,7 @@ public class MagicBar
 			ITiledTextureRegion bufIcon, ITiledTextureRegion debufIcon, VertexBufferObjectManager vbom)
 	{
 		
-		this.buletIcon = new AnimatedSprite(X, Y, buletIcon, vbom)
+		this.buletIcon = new AnimatedSprite(mX, mY, buletIcon, vbom)
 		{
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 	        {
@@ -51,7 +64,7 @@ public class MagicBar
 	        };
 	    };
 		
-		this.wallIcon = new AnimatedSprite(X, Y+iconHeight+iconDistantion, wallIcon, vbom)
+		this.wallIcon = new AnimatedSprite(mX, mY+mIconHeight+mIconDistantion, wallIcon, vbom)
 		{
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 	        {
@@ -62,7 +75,7 @@ public class MagicBar
 	            return true;
 	        };
 	    };
-		this.natureIcon = new AnimatedSprite(X, Y+2*(iconHeight+iconDistantion), natureIcon, vbom){
+		this.natureIcon = new AnimatedSprite(mX, mY+2*(mIconHeight+mIconDistantion), natureIcon, vbom){
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 	        {
 	            if (touchEvent.isActionUp())
@@ -72,7 +85,7 @@ public class MagicBar
 	            return true;
 	        };
 	    };
-		this.bufIcon = new AnimatedSprite(X, Y+3*(iconHeight+iconDistantion), bufIcon, vbom){
+		this.bufIcon = new AnimatedSprite(mX, mY+3*(mIconHeight+mIconDistantion), bufIcon, vbom){
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 	        {
 	            if (touchEvent.isActionUp())
@@ -82,7 +95,7 @@ public class MagicBar
 	            return true;
 	        };
 	    };
-		this.debufIcon = new AnimatedSprite(X, Y+4*(iconHeight+iconDistantion), debufIcon, vbom){
+		this.debufIcon = new AnimatedSprite(mX, mY+4*(mIconHeight+mIconDistantion), debufIcon, vbom){
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
 	        {
 	            if (touchEvent.isActionUp())
@@ -125,13 +138,13 @@ public class MagicBar
 		this.bufIcon.setCurrentTileIndex(i4);
 		this.debufIcon.setCurrentTileIndex(i5);
 		
-		choosenIcon=index;
+		mChoosenIcon=index;
 		
 	}
 	
 	public int getChoosenIcon()
 	{
-		return choosenIcon;
+		return mChoosenIcon;
 	}
 	
 }

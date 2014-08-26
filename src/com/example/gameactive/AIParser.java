@@ -1,22 +1,50 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.gameactive;
 import java.util.LinkedList;
 
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.*;
 
-public class AIParser extends DefaultHandler
+/*
+ * This class load AI parametres from XML-file using SAX-parser.
+ * @author Denis Terehin
+ */
+public class AiParser extends DefaultHandler
 {
-	AI ai = new AI();
-	String thisElement = "";
-	int tempId;
-	String tempAction;
-	float[] tempReceptorK={0,0,0,0,0};
-	int currentIndex=0;
-	LinkedList<ReceptorK> tempReceptorKList=new LinkedList<ReceptorK>();
-	Boolean isCreated=false;
+	private Ai mAi;
+	private String mThisElement;
+	private int mTempId;
+	private String mTempAction;
+	private float[] mTempReceptorK={0,0,0,0,0};
+	private int mCurrentIndex;
+	private LinkedList<ReceptorK> mTempReceptorKList;
+	private Boolean mIsCreated;
 	
-	public AI getResult(){
-	  return ai;
+	public void init(GameScene scene){
+		mAi = new Ai();
+		mIsCreated=false;
+		mTempReceptorKList=new LinkedList<ReceptorK>();
+		mCurrentIndex=0;
+		mThisElement = "";
+	}
+	
+	public Ai getResult(){
+	  return mAi;
 	}
 
 	@Override
@@ -26,80 +54,86 @@ public class AIParser extends DefaultHandler
 
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-	  thisElement = qName;
-	  if(thisElement.equals("node"))
+	  mThisElement = qName;
+	  if(mThisElement.equals("node"))
 	  {
 		  if(atts.getValue("type").equals("define"))
-			  ai.path.addNode(new PathNode(Integer.parseInt(atts.getValue("x")),Integer.parseInt(atts.getValue("y"))));
+			  mAi.getPath().addNode(new PathNode(Integer.parseInt(atts.getValue("x")),Integer.parseInt(atts.getValue("y"))));
 		  else
-			  ai.path.addNode(new PathNode(true,Integer.parseInt(atts.getValue("x")),Integer.parseInt(atts.getValue("y")),Integer.parseInt(atts.getValue("minX")),Integer.parseInt(atts.getValue("minY"))));
+			  mAi.getPath().addNode(new PathNode(true,Integer.parseInt(atts.getValue("x")),Integer.parseInt(atts.getValue("y")),Integer.parseInt(atts.getValue("minX")),Integer.parseInt(atts.getValue("minY"))));
 	  }
-	  if(thisElement.equals("memory"))
-		  ai.memory=new Memory(Integer.parseInt(atts.getValue("size")));
-	  if(thisElement.equals("receptor"))
-		  tempId=Integer.parseInt(atts.getValue("id"));
-	  if(thisElement.equals("reflector"))
-		  tempAction=atts.getValue("action");
-	  if(thisElement.equals("receptork"))
+	  if(mThisElement.equals("memory"))
+		  mAi.setMemory(new Memory(Integer.parseInt(atts.getValue("size"))));
+	  if(mThisElement.equals("receptor"))
+		  mTempId=Integer.parseInt(atts.getValue("id"));
+	  if(mThisElement.equals("reflector"))
+		  mTempAction=atts.getValue("action");
+	  if(mThisElement.equals("receptork"))
 	  {
-		  tempAction=atts.getValue("action");
-		  tempId=Integer.parseInt(atts.getValue("id"));
-		  for(int i=0;i<ai.reflectors.size();i++)
+		  mTempAction=atts.getValue("action");
+		  mTempId=Integer.parseInt(atts.getValue("id"));
+		  for(int i=0;i<mAi.getReflectors().size();i++)
 		  {
-			  if(ai.reflectors.get(i).action.equals(tempAction))
+			  if(mAi.getReflectors().get(i).getAction().equals(mTempAction))
 			  {
-				  tempReceptorKList.add(new ReceptorK(tempId, tempReceptorK));
-				  ai.reflectors.getLast().receptorsK.add(new ReceptorK(tempId, tempReceptorK));
+				  mTempReceptorKList.add(new ReceptorK(mTempId, mTempReceptorK));
+				  mAi.getReflectors().getLast().getReceptorsK().add(new ReceptorK(mTempId, mTempReceptorK));
 				  break;
 			  }
 		  }
 		  
-		  tempReceptorKList=new LinkedList<ReceptorK>();
-		  currentIndex=0;
-		  tempReceptorK=new float[]{0,0,0,0,0};
-		  isCreated=false;
+		  mTempReceptorKList=new LinkedList<ReceptorK>();
+		  mCurrentIndex=0;
+		  mTempReceptorK=new float[]{0,0,0,0,0};
+		  mIsCreated=false;
 	  }
-	  if(thisElement.equals("k"))
+	  if(mThisElement.equals("k"))
 	  {
-		  tempReceptorK[currentIndex]=Float.parseFloat(atts.getValue("value"));
-		  currentIndex++;
+		  mTempReceptorK[mCurrentIndex]=Float.parseFloat(atts.getValue("value"));
+		  mCurrentIndex++;
 	  }
 	}
 
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-	  thisElement = "";
+	  mThisElement = "";
 	}
 
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-	  if (thisElement.equals("receptor")) {
+	  if (mThisElement.equals("receptor")) {
 		 String tempValue=new String(ch, start, length);
 		 if(tempValue.equals("isDamage"))
-			 ai.receptors.add(new ReceptorDamage(tempId));
+			 mAi.getReceptors().add(new ReceptorDamage(mTempId));
 		 if(tempValue.equals("random"))
-			 ai.receptors.add(new ReceptorRandom(tempId));
+			 mAi.getReceptors().add(new ReceptorRandom(mTempId));
 		 if(tempValue.equals("isAttackted"))
-			 ai.receptors.add(new ReceptorAttackted(tempId));
+			 mAi.getReceptors().add(new ReceptorAttackted(mTempId));
 		 if(tempValue.equals("isAnotherAttacked"))
-			 ai.receptors.add(new ReceptorAnotherAttacked(tempId));
+			 mAi.getReceptors().add(new ReceptorAnotherAttacked(mTempId));
+		 if(tempValue.equals("isStay"))
+			 mAi.getReceptors().add(new ReceptorIsStay(mTempId));
+		 if(tempValue.equals("thereAreMobs"))
+			 mAi.getReceptors().add(new ReceptorThereAreMobs(mTempId));
 		 if(tempValue.equals("isWallRepeat"))
-			 ai.receptors.add(new ReceptorRepeatControl(tempId,"createWall",new float[] {50,100,150,200}));
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"createWall",new float[] {50,100,150,200}));
 		 if(tempValue.equals("isBuletRepeat"))
-			 ai.receptors.add(new ReceptorRepeatControl(tempId,"createBulet",new float[] {50,100,150,200}));
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"createBulet",new float[] {50,100,150,200}));
 		 if(tempValue.equals("isAttackPlayerRepeat"))
-			 ai.receptors.add(new ReceptorRepeatControl(tempId,"attackPlayer",new float[] {50,100,150,200}));
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"attackPlayer",new float[] {50,100,150,200}));
 		 if(tempValue.equals("isGoRepeat"))
-			 ai.receptors.add(new ReceptorRepeatControl(tempId,"go",new float[] {50,100,150,200}));
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"go",new float[] {50,100,150,200}));
+		 if(tempValue.equals("isStartGoRepeat"))
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"go",new float[] {10,11,12,200}));
 		 if(tempValue.equals("isStormtrooperRepeat"))
-			 ai.receptors.add(new ReceptorRepeatControl(tempId,"createStormtrooper",new float[] {500,600,700,800}));
+			 mAi.getReceptors().add(new ReceptorRepeatControl(mTempId,"createStormtrooper",new float[] {500,600,700,800}));
 		 		 	     
 	  }
 	  
-	  if ((thisElement.equals("reflector"))&&(isCreated==false)) {
-			 ai.reflectors.add(new Reflector(tempAction,tempReceptorKList));
-			 tempReceptorKList=new LinkedList<ReceptorK>();
-			 isCreated=true;
+	  if ((mThisElement.equals("reflector"))&&(mIsCreated==false)) {
+			 mAi.getReflectors().add(new Reflector(mTempAction,mTempReceptorKList));
+			 mTempReceptorKList=new LinkedList<ReceptorK>();
+			 mIsCreated=true;
 		  }
 	    
 	}
@@ -109,48 +143,3 @@ public class AIParser extends DefaultHandler
 	  System.out.println("Stop parse XML...");
 	}
 }
-
-
-
-
-
-/*@Override
-public void startElement(String uri, String localName, String qName,
-        Attributes attributes) throws SAXException {
-    System.out.println("Тег: "+qName);
-    if(qName.equals("book"))
-        System.out.println("id книги "+attributes.getValue("id"));
-//      System.out.println(attributes.getLength());
-    super.startElement(uri, localName, qName, attributes);
-
-    
-}
-
-@Override
-public void characters(char[] c, int start, int length) 
-                                             throws SAXException {
-    super.characters(c, start,  length);
-    for(int i=start;i< start+length;++i)
-        System.err.print(c[i]);
-}
-
-@Override
-public void endElement(String uri, String localName, String qName) 
-                                                throws SAXException {
-    
-    System.out.println("Тег разобран: "+qName);
-    super.endElement(uri,localName, qName);
-}
-
-@Override
-public void startDocument() throws SAXException {
-    System.out.println("Начало разбора документа!");
-    super.startDocument();
-}
-
-@Override
-public void endDocument() throws SAXException {
-    super.endDocument();
-    System.out.println("Разбор документа окончен!");
-
-}*/

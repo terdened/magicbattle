@@ -37,11 +37,10 @@ public class GameSceneCreator {
 			float manaK=enemy.getMana(enemy.playerMagic.buletCost);
 			if(manaK>0.3)
 			{
-				sceneHolder.bulet.add(new Bulet(temp.damage*manaK,temp.element));
-				sceneHolder.bulet.getLast().init(temp.startX,temp.startY,100);
-				sceneHolder.bulet.getLast().loadBulet(sceneHolder.resourcesManager.enemy_bulet_region, sceneHolder.vbom, sceneHolder.wall, sceneHolder.player, sceneHolder.enemyList);
-				sceneHolder.bulet.getLast().startFly(temp.finalX,temp.finalY,110);
-				sceneHolder.attachChild(sceneHolder.bulet.getLast().player_bulet);
+				sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_bulet_region,temp.damage,temp.element, sceneHolder));
+				sceneHolder.bulet.getLast().init(temp.mStartX,temp.mStartY,100);
+				sceneHolder.bulet.getLast().startFly(temp.mFinalX,temp.mFinalY,110);
+				sceneHolder.attachChild(sceneHolder.bulet.getLast());
 				sceneHolder.bulet.getLast().createShadow(sceneHolder.vbom, sceneHolder.resourcesManager.light_shadow);
 				sceneHolder.buletCount++;
 			}
@@ -60,55 +59,32 @@ public class GameSceneCreator {
     		if(manaK>0.3)
     		{   
     		//Заменить на EnemyMagic
-    			sceneHolder.wall.add(new Wall(wallQueue.get(i).x, wallQueue.get(i).y, enemy.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.enemy_wall_region, sceneHolder.vbom, wallQueue.get(i).element));             
+    			sceneHolder.wall.add(new Wall(wallQueue.get(i).getX(), wallQueue.get(i).getY(), enemy.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.enemy_wall_region, sceneHolder.vbom, wallQueue.get(i).getElement()));             
 	        		
-        			if((sceneHolder.wall.getLast().element=="water")||(sceneHolder.wall.getLast().element=="earth"))
+        			if((sceneHolder.wall.getLast().getElement()=="water")||(sceneHolder.wall.getLast().getElement()=="earth"))
         			{
         				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
 		        		
 		        		Body tempBody;
-		        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast().wallTexture, BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
+		        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast(), BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
 		        		tempBody.setUserData("wall");
 		        		sceneHolder.wall.getLast().initBody(tempBody);
 		        		
-		        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast().wallTexture, sceneHolder.wall.getLast().wallBody, true, false));
+		        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast(), sceneHolder.wall.getLast().getWallBody(), true, false));
         			}
-        			sceneHolder.wall.getLast().wallTexture.setRotation(wallQueue.get(i).rotation); 
-        			sceneHolder.attachChild(sceneHolder.wall.getLast().wallTexture);
+        			sceneHolder.wall.getLast().setRotation(wallQueue.get(i).getRotation()); 
+        			sceneHolder.attachChild(sceneHolder.wall.getLast());
     		}
         		
     		
 		}
 	}
 	
-	public void createStormtrooper(LinkedList<enviromentObject> objectQueue)
+	public void createStormtrooper(LinkedList<EnviromentObject> objectQueue)
 	{
 		for(int i=0;i<objectQueue.size();i++)
 		{
-   		
-			//float manaK=enemy.getMana(enemyMagic.wallCost);
-			
-    		//if(manaK>0.3)
-    		//{   
-    		//Заменить на EnemyMagic
-        			//wall.add(new Wall(wallQueue.get(i).x, wallQueue.get(i).y, enemyMagic.wallHealth*manaK, resourcesManager.enemy_wall_region, vbom, wallQueue.get(i).element));             
-			sceneHolder.weather.setStormtrooper(sceneHolder.vbom, sceneHolder, objectQueue);			
-        			/*if((wall.getLast().element=="water")||(wall.getLast().element=="earth"))
-        			{
-	        			FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-		        		
-		        		Body tempBody;
-		        		tempBody = PhysicsFactory.createBoxBody(physicsWorld, wall.getLast().wallTexture, BodyType.StaticBody, FIXTURE_DEF);
-		        		tempBody.setUserData("wall");
-		        		wall.getLast().initBody(tempBody);
-		        		
-		        		physicsWorld.registerPhysicsConnector(new PhysicsConnector(wall.getLast().wallTexture, wall.getLast().wallBody, true, false));
-        			}*/
-        			//wall.getLast().wallTexture.setRotation(wallQueue.get(i).rotation); 
-	        		//attachChild(weather.objects.getLast().texture);
-    		//}
-        		
-    		
+			sceneHolder.weather.setStormtrooper(objectQueue);			
 		}
 	}
 	
@@ -164,12 +140,12 @@ public class GameSceneCreator {
 				if(pValueX!=0)
 				{				
 					if(pValueX>0)	
-						sceneHolder.player.rotate((float)(Math.atan(pValueY/pValueX)*180/3.14)+90);
+						sceneHolder.player.setRotation((float)(Math.atan(pValueY/pValueX)*180/3.14)+90);
 					else
-						sceneHolder.player.rotate((float)(Math.atan(pValueY/pValueX)*180/3.14)-90);
+						sceneHolder.player.setRotation((float)(Math.atan(pValueY/pValueX)*180/3.14)-90);
 				}
 				else
-					sceneHolder.player.rotate(0);
+					sceneHolder.player.setRotation(0);
 			}
 
 			@Override
@@ -220,5 +196,15 @@ public class GameSceneCreator {
 		sceneHolder.registerUpdateHandler(sceneHolder.physicsWorld);
 	}
 
-
+	public void createMob(String name,int i)
+	{
+		if(name.equals("Soul"))
+		{
+			MobSoul mob=new MobSoul(sceneHolder, 0, 0, sceneHolder.vbom,sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager.mobs_regions[i]);
+			sceneHolder.mobsList.add(mob);
+			mob.init(100, 0.02f, 5, 5);
+			sceneHolder.attachChild(sceneHolder.mobsList.getLast());
+		}
+	}
+	
 }

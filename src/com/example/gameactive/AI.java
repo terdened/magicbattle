@@ -1,91 +1,68 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class AI {
+/*
+ * Artificial intelligence class.
+ * It's look like an expert system. Content Receptors and Reflectors for estimating the best action in geven situation.
+ * Receptors works like detectors and determine inner states of world.
+ * Reflectors is an action of AI.
+ * @author Denis Terehin
+ */
+public class Ai {
 
-	public ArrayList<Receptor> receptors;
-	public LinkedList<Reflector> reflectors;
+	private Path mPath;
+	private Memory mMemory;
+	private ArrayList<Receptor> mReceptors;
+	private LinkedList<Reflector> mReflectors;
 	
-	public Memory memory;
-	
-	
-	public LinkedList<Wall> wallQueue; //Некрасиво
-	public LinkedList<Bulet> buletQueue; //Некрасиво
-	public LinkedList<enviromentObject> objectQueue; //Некрасиво
-	
-	public Path path;
-	
-	public AI()
+	public Ai()
 	{
-		receptors=new ArrayList<Receptor>();
-		reflectors=new LinkedList<Reflector>();
-		
-		//memory=new Memory(50);
-		
-		//receptors.add(new ReceptorDamage(1));
-		//receptors.add(new ReceptorRepeatControl(2,"createWall"));
-		//receptors.add(new ReceptorRepeatControl(3,"createBulet"));
-		
-		LinkedList<ReceptorK> receptorsK=new LinkedList<ReceptorK>();
-		
-		/*receptorsK.add(new ReceptorK(1, new float[] {0.1f, 1f, 0.7f, 0.5f, 0.1f}));
+		mReceptors=new ArrayList<Receptor>();
+		mReflectors=new LinkedList<Reflector>();
+		setPath(new Path());
+	}	
 
-		
-		reflectors.add(new Reflector("go", receptorsK));
-		
-		
-		receptorsK=new LinkedList<ReceptorK>();
-		receptorsK.add(new ReceptorK(1, new float[] {1, 0.1f, 0.3f, 0.5f, 0.7f}));
-		receptorsK.add(new ReceptorK(3, new float[] {0f, 0.3f, 0.5f, 0.7f, 1f}));
-
-		
-		reflectors.add(new Reflector("stay", receptorsK));
-		
-		
-		receptorsK=new LinkedList<ReceptorK>();		
-		receptorsK.add(new ReceptorK(1,  new float[] {0.1f, 0.1f, 0.3f, 0.7f, 1f}));
-		receptorsK.add(new ReceptorK(2, new float[] {1f, 0.7f, 0.5f, 0.3f, 0.1f}));
-		
-		reflectors.add(new Reflector("createWall", receptorsK));
-		
-		
-		receptorsK=new LinkedList<ReceptorK>();		
-		receptorsK.add(new ReceptorK(1, new float[] {1f, 0.7f, 0.5f, 0.3f, 0.1f})); //рецептор опасности
-		receptorsK.add(new ReceptorK(2, new float[] {1f, 1.0f, 0.9f, 0.8f, 0.7f}));	 //рецептор повтора создания стены
-		receptorsK.add(new ReceptorK(3, new float[] {1f, 0.7f, 0.5f, 0.3f, 0.1f}));	 //рецептор повтора создания снаряда
-		
-		reflectors.add(new Reflector("createBulet", receptorsK));
-		*/
-		wallQueue=new LinkedList<Wall>();
-		buletQueue=new LinkedList<Bulet>();
-		path=new Path();
-		
-	}
-	
-	
+	/*
+	 * This method estimate the best action
+	 * @return action name
+	 */
 	public String getAction(GameState gameState)
 	{
-		for(int i=0; i<receptors.size(); i++)
+		for(int i=0; i<mReceptors.size(); i++)
 		{
-			receptors.get(i).getState(gameState, memory);
+			mReceptors.get(i).getState(gameState, mMemory);
 		}
 				
-		for(int i=0; i<reflectors.size(); i++)
+		for(int i=0; i<mReflectors.size(); i++)
 		{
-			reflectors.get(i).estimateK(receptors);
+			mReflectors.get(i).estimateK(mReceptors);
 		}
 		
 		
-		String result=reflectors.getFirst().action;
+		String result=mReflectors.getFirst().getAction();
 		int resultIndex=0;
 		
-		for(int i=1; i<reflectors.size();i++)
+		for(int i=1; i<mReflectors.size();i++)
 		{
-			if(reflectors.get(i).k>reflectors.get(resultIndex).k)
+			if(mReflectors.get(i).getK()>mReflectors.get(resultIndex).getK())
 			{
-				result=reflectors.get(i).action;
+				result=mReflectors.get(i).getAction();
 				resultIndex=i;
 			}
 		}
@@ -93,50 +70,44 @@ public class AI {
 		if(!result.equals("stay"))
 		{
 			gameState.setAction(result);
-			memory.setState(gameState);  //Запоминаем последнее состояние и реакцию на него
+			mMemory.setState(gameState);  //Запоминаем последнее состояние и реакцию на него
 		}
 		
-		memory.update();
+		mMemory.update();
 		
 		return result;
 	}
 	
-	
-	public void setWallList(LinkedList<Wall> temp)
-	{
-		wallQueue=new LinkedList<Wall>();
-		wallQueue=temp;
+	public Path getPath() {
+		return mPath;
 	}
-	
-	public LinkedList<Wall> getWallList()
-	{
-		LinkedList<Wall> temp=wallQueue;
-		return temp;
+
+	public void setPath(Path mPath) {
+		this.mPath = mPath;
 	}
 	
 	
-	public void setBuletList(LinkedList<Bulet> temp)
-	{
-		buletQueue=new LinkedList<Bulet>();
-		buletQueue=temp;
+	public Memory getMemory() {
+		return mMemory;
+	}
+
+	public void setMemory(Memory mMemory) {
+		this.mMemory = mMemory;
 	}
 	
-	public LinkedList<Bulet> getBuletList()
-	{
-		LinkedList<Bulet> temp=buletQueue;
-		return temp;
+	public ArrayList<Receptor> getReceptors() {
+		return mReceptors;
 	}
-	
-	public void setObjectList(LinkedList<enviromentObject> temp)
-	{
-		objectQueue=new LinkedList<enviromentObject>();
-		objectQueue=temp;
+
+	public void setReceptors(ArrayList<Receptor> mReceptors) {
+		this.mReceptors = mReceptors;
 	}
-	
-	public LinkedList<enviromentObject> getObjectList()
-	{
-		LinkedList<enviromentObject> temp=objectQueue;
-		return temp;
+
+	public LinkedList<Reflector> getReflectors() {
+		return mReflectors;
 	}
-	
+
+	public void setReflectors(LinkedList<Reflector> mReflectors) {
+		this.mReflectors = mReflectors;
+	}
 }

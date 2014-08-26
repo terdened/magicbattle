@@ -3,6 +3,17 @@
 	<name>MagicBattle</name>
 	<comment></comment>
 	<projects>
+		<project>AndEngine</project>
+		<project>AndEngineAugmentedRealityExtension</project>
+		<project>AndEngineCocosBuilderExtension</project>
+		<project>AndEngineLiveWallpaperExtension</project>
+		<project>AndEngineMODPlayerExtension</project>
+		<project>AndEngineMultiplayerExtension</project>
+		<project>AndEnginePhysicsBox2DExtension</project>
+		<project>AndEngineScriptingExtension</project>
+		<project>AndEngineSVGTextureRegionExtension</project>
+		<project>AndEngineTexturePackerExtension</project>
+		<project>AndEngineTMXTiledMapExtension</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

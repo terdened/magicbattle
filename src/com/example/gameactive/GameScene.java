@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.example.gameactive.BaseScene;
 import com.example.gameactive.SceneManager.SceneType;
+import com.magickbattle.level.Level;
 
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
@@ -30,6 +31,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public LinkedList<InformText> textList= new LinkedList<InformText>();
 	public Sprite bckgr;
 	public Sprite river;
+	public LinkedList<Mob> mobsList;
 	public LinkedList<Bulet> bulet;
 	public LinkedList<Buf> buf;
 	public LinkedList<Wall> wall;
@@ -60,13 +62,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
 	public PhysicsWorld physicsWorld;
 	public String levelName;
+	public Level mLevel;
 	//End variables
 	
 	public void addTextList(LinkedList<TextInformHolder> tempList,float width)
 	{
 		for(int i=0;i<tempList.size();i++)
 		{
-			InformText tempText=new InformText(tempList.get(i).x, tempList.get(i).y, resourcesManager.font, tempList.get(i).text, vbom, (int)tempList.get(i).time);  		
+			InformText tempText=new InformText(tempList.get(i).getX(), tempList.get(i).getY(),
+					resourcesManager.font, tempList.get(i).getText(), vbom, (int)tempList.get(i).getTime());  		
 			textList.add(tempText);
 			textList.getLast().setScale(0.5f);
 			textList.getLast().setX(textList.getLast().getX()+width/2-textList.getLast().getWidth()/2);
@@ -131,14 +135,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
         
         buletCount=0;
 
-        weather = new Weather(false, 0, false, 0, false, 0 , new Vector2(0,0), resourcesManager.wall_region, resourcesManager);
+        weather = new Weather(false, 0, false, 0, false, 0 , new Vector2(0,0), 
+        		resourcesManager.wall_region, resourcesManager,this);
         this.attachChild(weather.scene);
         //weather.setRain(2000);
         bulet = new LinkedList<Bulet>();
         buf = new LinkedList<Buf>();
         wall = new LinkedList<Wall>(); 
         wallBody= new LinkedList<Body>();
-
+        mobsList= new LinkedList<Mob>();
         setOnSceneTouchListener(this);
         gameSceneEventController.onSceneUpdateEvent(this);
         
@@ -171,5 +176,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     {
     	 return gameSceneEventController.onSceneTouchEvent( pScene, pSceneTouchEvent);
     }
+    
+    public void attachLevelHolder(Level pLevel)
+    {
+    	mLevel=pLevel;
+    	this.attachChild(mLevel);
+    }
+    
     
 }

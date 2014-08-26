@@ -1,26 +1,58 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
-import java.util.LinkedList;
-
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.*;
 
+/*
+ * Class parse magics type from XML-file
+ * Class use SAX-parser
+ * @author Denis Terehin
+ */
 public class MagicParser extends DefaultHandler
 {
-	PlayerMagic playerMagic = new PlayerMagic();
-	String thisElement = "";
-	String tempMagic="none";
-	String tempCost="none";
-	String tempPower="none";
-	String tempTime="none";
-	String tempType="none";
-	String tempNode="none";
-	String tempMPS="none";
-	String tempHP="none";
-	String tempMP="none";
+	private PlayerMagic mPlayerMagic;
+	private String mThisElement;
+	private String mTempMagic;
+	private String mTempCost;
+	private String mTempPower;
+	private String mTempTime;
+	private String mTempType;
+	private String mTempNode;
+	private String mTempMPS;
+	private String mTempHP;
+	private String mTempMP;
 	
+	public MagicParser()
+	{
+		mPlayerMagic = new PlayerMagic();
+		mThisElement = "";
+		mTempMagic="none";
+		mTempCost="none";
+		mTempPower="none";
+		mTempTime="none";
+		mTempType="none";
+		mTempNode="none";
+		setTempMPS("none");
+		setTempHP("none");
+		setTempMP("none");
+	}
 	
 	public PlayerMagic getResult(){
-	  return playerMagic;
+	  return mPlayerMagic;
 	}
 
 	@Override
@@ -30,69 +62,101 @@ public class MagicParser extends DefaultHandler
 
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-	  thisElement = qName;
-	  if(thisElement.equals("element"))
+	  mThisElement = qName;
+	  if(mThisElement.equals("element"))
 	  {
-		  playerMagic.element=atts.getValue("value");
+		  mPlayerMagic.element=atts.getValue("value");
 	  }
 	  
-	  if(thisElement.equals("HP"))
+	  if(mThisElement.equals("HP"))
 	  {
-		  this.tempHP=atts.getValue("value");
+		  this.setTempHP(atts.getValue("value"));
 	  }
-	  if(thisElement.equals("MP"))
+	  if(mThisElement.equals("MP"))
 	  {
-		  this.tempMP=atts.getValue("value");
+		  this.setTempMP(atts.getValue("value"));
 	  }
-	  if(thisElement.equals("MPS"))
+	  if(mThisElement.equals("MPS"))
 	  {
-		  this.tempMPS=atts.getValue("value");
+		  this.setTempMPS(atts.getValue("value"));
 	  }
 	  
 	  
-	  if(thisElement.equals("magic"))
+	  if(mThisElement.equals("magic"))
 	  {
-		  tempMagic=atts.getValue("value");
-		  tempCost=atts.getValue("cost");
-		  tempPower=atts.getValue("power");
-		  if((tempMagic.equals("buf"))||(tempMagic.equals("debuf")))
+		  mTempMagic=atts.getValue("value");
+		  mTempCost=atts.getValue("cost");
+		  mTempPower=atts.getValue("power");
+		  if((mTempMagic.equals("buf"))||(mTempMagic.equals("debuf")))
 		  {
-			  tempType=atts.getValue("type");
-			  tempTime=atts.getValue("time");
+			  mTempType=atts.getValue("type");
+			  mTempTime=atts.getValue("time");
 		  }
-		  tempNode="magic";
+		  mTempNode="magic";
 	  }
 
 	}
 
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-	  thisElement = "";
+	  mThisElement = "";
 	}
 
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
-	  if (tempNode.equals("magic")) {
+	  if (mTempNode.equals("magic")) {
 		 String tempValue=new String(ch, start, length);
-		 if(tempMagic.equals("buf"))
-			 playerMagic.initBuf(tempType, Float.parseFloat(tempPower), Long.parseLong(tempTime), Float.parseFloat(tempCost));
-		 if(tempMagic.equals("debuf"))
-			 playerMagic.initDebuf(tempType, Float.parseFloat(tempPower), Long.parseLong(tempTime), Float.parseFloat(tempCost));
-		 if(tempMagic.equals("bulet"))
-			 playerMagic.initBulet(Float.parseFloat(tempPower), Float.parseFloat(tempCost));
-		 if(tempMagic.equals("wall"))
-			 playerMagic.initWall(Float.parseFloat(tempPower), Float.parseFloat(tempCost));
-		 if(tempMagic.equals("element"))
-			 playerMagic.initElement(Float.parseFloat(tempPower), Float.parseFloat(tempCost));
+		 if(mTempMagic.equals("buf"))
+			 mPlayerMagic.initBuf(mTempType, Float.parseFloat(mTempPower), Long.parseLong(mTempTime), Float.parseFloat(mTempCost));
+		 if(mTempMagic.equals("debuf"))
+			 mPlayerMagic.initDebuf(mTempType, Float.parseFloat(mTempPower), Long.parseLong(mTempTime), Float.parseFloat(mTempCost));
+		 if(mTempMagic.equals("bulet"))
+			 mPlayerMagic.initBulet(Float.parseFloat(mTempPower), Float.parseFloat(mTempCost));
+		 if(mTempMagic.equals("wall"))
+			 mPlayerMagic.initWall(Float.parseFloat(mTempPower), Float.parseFloat(mTempCost));
+		 if(mTempMagic.equals("element"))
+			 mPlayerMagic.initElement(Float.parseFloat(mTempPower), Float.parseFloat(mTempCost));
 		 	     
 	  }
-	  tempNode="none";
+	  mTempNode="none";
 	    
 	}
 
 	@Override
 	public void endDocument() {
 	  System.out.println("Stop parse XML...");
+	}
+
+	public PlayerMagic getPlayerMagic() {
+		return mPlayerMagic;
+	}
+
+	public void setPlayerMagic(PlayerMagic mPlayerMagic) {
+		this.mPlayerMagic = mPlayerMagic;
+	}
+
+	public String getTempMPS() {
+		return mTempMPS;
+	}
+
+	public void setTempMPS(String mTempMPS) {
+		this.mTempMPS = mTempMPS;
+	}
+
+	public String getTempHP() {
+		return mTempHP;
+	}
+
+	public void setTempHP(String mTempHP) {
+		this.mTempHP = mTempHP;
+	}
+
+	public String getTempMP() {
+		return mTempMP;
+	}
+
+	public void setTempMP(String mTempMP) {
+		this.mTempMP = mTempMP;
 	}
 }
 

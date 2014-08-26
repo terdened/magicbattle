@@ -1,5 +1,19 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
-
 import java.util.LinkedList;
 
 import org.andengine.engine.camera.Camera;
@@ -7,37 +21,50 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+
+/*
+ * Enemy is a Player with AI
+ * Use AI parser for loading AI from XML-file
+ * Enemy get next action from AI every step 
+ * @author Denis Terehin
+ */
 public abstract class Enemy extends Player 
 {
-	 public AI ai;
-	
-	 public String element;
-	 public String name;
-	
+	 private Ai mAi;
+	 private String mElement;
+	 private String mName;
+	 private GameScene mScene;
 	 
-	 
-	 public Enemy(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld,  ITiledTextureRegion player_region)
-	 {
+	 public Enemy(final GameScene scene,float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld,  ITiledTextureRegion player_region)
+	 {		 
 	    	super(pX, pY, vbo, camera, physicsWorld, player_region);
+	    	this.mScene=scene;
+	    	
 	 }
 	
+	 /*
+	  * Initializtion of AI
+	  */
 	 public void initAI()
 	 {
-		 ai=new AI();
+		 mAi=new Ai();
 	 }
 	 
+	 /*
+	  * Method return the best action in current situation
+	  */
 	 public String update(GameState gameState)
 	 {
 		 String action="stay";
 		 
-		 if(!this.isDead)
+		 if(!this.getIsDead())
 		 {
-			 action=ai.getAction(gameState);
+			 action=mAi.getAction(gameState);
 			 		 
 			 if((action.equals("go"))&&(isGo==false))
 			 {
-				 ai.path.nextNode();
-				 this.setDist( ai.path.getNodeX(),  ai.path.getNodeY());
+				 mAi.getPath().nextNode();
+				 this.setDest( mAi.getPath().getNodeX(),  mAi.getPath().getNodeY());
 			 }
 			 else
 			 if(action.equals("createWall"))
@@ -69,7 +96,16 @@ public abstract class Enemy extends Player
 			 {
 				this.attacked(300);
 			 }
-			 
+			 else
+			 if(action.equals("createMob"))
+			 {
+				this.createMob();
+			 }
+			 else
+			 if(action.equals("mobAttack"))
+			 {
+				this.mobAttack();
+			 }
 			 
 			 this.isAttackted=false;
 		 }
@@ -79,63 +115,73 @@ public abstract class Enemy extends Player
 			 
 	 }
 	 
+	 /*
+	  * Method create walls on game scene 
+	  */
 	 public void createWall()
 	 {
 		 LinkedList<Wall> temp=new LinkedList<Wall>();
-		 temp.add(new Wall(this.getX(),this.getY()+100,this.element));
-		 temp.getLast().rotation=135;
-		 temp.add(new Wall(this.getX()+50,this.getY()+100,this.element));
-		 temp.getLast().rotation=90;
-		 temp.add(new Wall(this.getX()+100,this.getY()+100,this.element));
-		 temp.getLast().rotation=45;
-		 ai.setWallList(temp);
+		 temp.add(new Wall(this.getX(),this.getY()+100, playerMagic.wallHealth,
+				 mScene.resourcesManager.enemy_wall_region, mScene.vbom,this.mElement));
+		 temp.getLast().setRotation(135);
+		 temp.add(new Wall(this.getX()+50,this.getY()+100, playerMagic.wallHealth,
+				 mScene.resourcesManager.enemy_wall_region, mScene.vbom,this.mElement));
+		 temp.getLast().setRotation(90);
+		 temp.add(new Wall(this.getX()+100,this.getY()+100, playerMagic.wallHealth,
+				 mScene.resourcesManager.enemy_wall_region, mScene.vbom,this.mElement));
+		 temp.getLast().setRotation(45);
+		 this.mScene.gameSceneCreator.createWall(temp, this);
 	 }
 	 
+	 /*
+	  * Method create stormtroopes on game scene 
+	  */
 	 public void createStormtroopes()
 	 {
-		 LinkedList<enviromentObject> temp=new LinkedList<enviromentObject>();
+		 LinkedList<EnviromentObject> temp=new LinkedList<EnviromentObject>();
 		 int count=5;
 		 
 		 for(int i=0;i<count;i++)
 		 {
-			 temp.add(new enviromentObject(800/(2*count)+i*800/count, 450, false, 350, "stormtrooper", 0));
-			 temp.getLast().rotation=(float)Math.random()*90+135;
+			 temp.add(new EnviromentObject((float)(800/(2*count)+i*800/count), (float)450, false, 
+					 mScene.resourcesManager.enemyElementMagic,(long)350, mScene, new long[] {350}, "stormtrooper"));
+			 temp.getLast().setRotation((float)Math.random()*90+135);
 		 }
-		 
-		
-
-		 ai.setObjectList(temp);
+		 this.mScene.gameSceneCreator.createStormtrooper(temp);
 	 }
 	 
-	 
+	 /*
+	  * Method create bulet on game scene 
+	  */
 	 public void createBulet()
 	 {
 		 LinkedList<Bulet> temp=new LinkedList<Bulet>();
 		 
 
-		 	 temp.add(new Bulet(this.getDamage(),this.element));
+		 	 temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),mElement, mScene));
 		 	 temp.getLast().init(this.getX()+64,this.getY()+100+32,100);
-		 	 //temp.getLast().loadBulet(resourcesManager.player_bulet_region, vbom, wall, player, enemy);
 		 	 temp.getLast().lastInit(this.getX()+65,this.getY()+120+32,110);
 		 	 
-		 	temp.add(new Bulet(this.getDamage(),this.element));
+		 	temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),mElement, mScene));
 		 	 temp.getLast().init(this.getX()+64,this.getY()-100+32,100);
 		 	 //temp.getLast().loadBulet(resourcesManager.player_bulet_region, vbom, wall, player, enemy);
 		 	 temp.getLast().lastInit(this.getX()+65,this.getY()-120+32,110);
-		 	 
-		 	temp.add(new Bulet(this.getDamage(),this.element));
+		 	
+		 	temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),mElement, mScene));
 		 	 temp.getLast().init(this.getX()+130+64,this.getY()+32,100);
 		 	 //temp.getLast().loadBulet(resourcesManager.player_bulet_region, vbom, wall, player, enemy);
 		 	 temp.getLast().lastInit(this.getX()+150+64,this.getY()+32,110);
 		 	 
-		 	temp.add(new Bulet(this.getDamage(),this.element));
+		 	temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),mElement, mScene));
 		 	 temp.getLast().init(this.getX()-130+64,this.getY()+32,100);
 		 	 //temp.getLast().loadBulet(resourcesManager.player_bulet_region, vbom, wall, player, enemy);
 		 	 temp.getLast().lastInit(this.getX()-150+64,this.getY()+32,110);
-
-		 ai.setBuletList(temp);
+		 	this.mScene.gameSceneCreator.createBulet(temp, this);
 	 }
 	 
+	 /*
+	  * Method attack player 
+	  */
 	 public void attackPlayer(float playerX, float playerY)
 	 {
 		 float tan=(this.getX()-playerX)/(playerY-this.getY());
@@ -145,24 +191,42 @@ public abstract class Enemy extends Player
 		 LinkedList<Bulet> temp=new LinkedList<Bulet>();
 		 
 
-	 	 temp.add(new Bulet(this.getDamage(),this.element));
+		 temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),mElement, mScene));
 	 	 temp.getLast().init(this.getX()+this.getWidth()/2,this.getY()+100+this.getHeight()/2,100);
  
 	 	 
 	 	 float distX=(float)(this.getX()+this.getWidth()/2+10*Math.cos(alpha));
 	 	 float distY=(float)(this.getY()+this.getHeight()/2+100+10*Math.sin(alpha));
 	 	 temp.getLast().lastInit(distX,distY,110);
-	 	 
 
-	 ai.setBuletList(temp);
+	 	 this.mScene.gameSceneCreator.createBulet(temp, this);
 	 }
 	 
+	 /*
+	  * Method create mob on game scene 
+	  */
+	 public void createMob()
+	 {
+		 mScene.gameSceneCreator.createMob("Soul",0);
+	 }
 	 
+	 /*
+	  * Method say "attack" for mobs
+	  */
+	 public void mobAttack()
+	 {
+		 for(int i=0;i<mScene.mobsList.size();i++)
+			 mScene.mobsList.get(i).Go(0);
+	 }
+	 
+	 /*
+	  * Method cerate text on game scene
+	  */
 	 public void saySmth()
 	 {
 		 LinkedList<String> phrasesList=new LinkedList<String>();
 		 
-		 if(name.equals("sokrat"))
+		 if(mName.equals("sokrat"))
 		 {
 			 phrasesList.add("Я знаю только то,\n что ничего не знаю");
 			 phrasesList.add("Заговори, чтобы\n я тебя увидел");
@@ -171,7 +235,7 @@ public abstract class Enemy extends Player
 			 phrasesList.add("Высшая мудрость \n различать добро и зло");
 			 
 		 }else
-			 if(name.equals("platon"))
+			 if(mName.equals("platon"))
 			 {
 				 phrasesList.add("Бог в нас самих");
 				 phrasesList.add("Сколько рабов,\n столько врагов");
@@ -179,7 +243,7 @@ public abstract class Enemy extends Player
 				 phrasesList.add("Основа всякой мудрости\n есть терпение");
 				 
 			 }else
-			 	 if(name.equals("aristotel"))
+			 	 if(mName.equals("aristotel"))
 				 {
 					 phrasesList.add("Платон - друг,\n но истина дороже");
 					 phrasesList.add("Начало есть более \n чем половина всего");
@@ -192,8 +256,29 @@ public abstract class Enemy extends Player
 		
 		TextInformHolder temp = new TextInformHolder(this.getX(),this.getY()-100,100,phrasesList.get(index));
 		tempText.add(temp);
-		
-		//text.setX(64-text.getWidth()/2);
-		//text.setY(32-text.getHeight()/2);
 	 }
+
+	public Ai getAi() {
+		return mAi;
+	}
+
+	public void setAi(Ai mAi) {
+		this.mAi = mAi;
+	}
+
+	public String getElement() {
+		return mElement;
+	}
+
+	public void setElement(String mElement) {
+		this.mElement = mElement;
+	}
+
+	public String getName() {
+		return mName;
+	}
+
+	public void setName(String mName) {
+		this.mName = mName;
+	}
 }

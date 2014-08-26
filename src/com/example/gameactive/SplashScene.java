@@ -1,6 +1,19 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.gameactive;
-
-
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
@@ -8,15 +21,18 @@ import org.andengine.opengl.util.GLState;
 import com.example.gameactive.BaseScene;
 import com.example.gameactive.SceneManager.SceneType;
 
-
+/*
+ * Scene with logo
+ * @author Denis Terehin
+ */
 public class SplashScene extends BaseScene
 {
-	private Sprite splash;
+	private Sprite mSplash;
 	
     @Override
     public void createScene()
     {
-    	splash = new Sprite(0, 0, resourcesManager.splash_region, vbom)
+    	mSplash = new Sprite(0, 0, resourcesManager.splash_region, vbom)
     	{
     	    @Override
     	    protected void preDraw(GLState pGLState, Camera pCamera) 
@@ -26,9 +42,9 @@ public class SplashScene extends BaseScene
     	    }
     	};
     	        
-    	splash.setScale(1.5f);
-    	splash.setPosition(260, 500);
-    	attachChild(splash);
+    	mSplash.setScale(1.5f);
+    	mSplash.setPosition(260, 500);
+    	attachChild(mSplash);
     }
 
     @Override
@@ -46,8 +62,8 @@ public class SplashScene extends BaseScene
     @Override
     public void disposeScene()
     {
-    	splash.detachSelf();
-        splash.dispose();
+    	mSplash.detachSelf();
+        mSplash.dispose();
         this.detachSelf();
         this.dispose();
     }

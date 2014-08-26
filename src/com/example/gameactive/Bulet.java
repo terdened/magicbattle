@@ -1,8 +1,20 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.gameactive;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -11,159 +23,168 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Bulet
+//TODO: extend AnimatedSprite
+/*
+ * Bulet
+ * @author Denis Terehin
+ */
+public class Bulet extends Sprite
 {
-	protected float startX;
-	protected float startY;
-	protected float finalX;
-	protected float finalY;
-	
-	protected float speedX;
-	protected float speedY;
-	
-	protected float speedK;
-	
-	protected long startTime;
-
-	
-	protected Sprite player_bulet;
-
-	
-	protected Boolean isInit;
-	protected Boolean isRemove;
+	protected float mStartX;
+	protected float mStartY;
+	protected float mFinalX;
+	protected float mFinalY;
+	protected float mSpeedX;
+	protected float mSpeedY;
+	protected float mSpeedK;
+	protected long mStartTime;
+	protected Boolean mIsInit;
+	protected Boolean mIsRemove;
+	protected final GameScene mScene;
 	
 	public float damage;
-	
 	public String element;
-	 
-	public Bulet(){} // No-argument Constructor
 	
-	Bulet(float damage, String element)
-	{
-		isInit=false;
-		isRemove=false;
+	public Bulet(ITextureRegion pTextureRegion, float damage, String element, GameScene scene) {
+		super( 0, 0, pTextureRegion,scene.vbom);
+		
+		mScene=scene;
+		mIsInit=false;
+		mIsRemove=false;
 		this.damage=damage;
 		this.element=element;
+		
 	}
 	
+	/*
+	 * First initialization of bulet
+	 * @param x is a start x
+	 * @param y is a start y
+	 * @param time is a start tap time
+	 */
 	public void init(float x, float y, long time)
 	{
-		startX=x;
-		startY=y;
-		speedK=(float) 0.1;
-		isInit=true;
-		startTime=time;
+		mStartX=x;
+		mStartY=y;
+		mSpeedK=(float) 0.1;
+		mIsInit=true;
+		mStartTime=time;
 	}
 	
-	public void loadBulet(ITextureRegion player_bulet_region, VertexBufferObjectManager vbom, final LinkedList<Wall> walls, final Player player, final List<Enemy> enemyList)
+	@Override
+    protected void onManagedUpdate(float pSecondsElapsed) 
     {
-		player_bulet = new Sprite(0, 0, player_bulet_region, vbom)
-		{
-            @Override
-            protected void onManagedUpdate(float pSecondsElapsed) 
+        super.onManagedUpdate(pSecondsElapsed);
+        int l=mScene.wall.size();
+        for(int i=0; i<l;i++)
+        {                
+            if (mScene.wall.get(i).collidesWith(this))
             {
-                super.onManagedUpdate(pSecondsElapsed);
-                int l=walls.size();
-                for(int i=0; i<l;i++)
-                {                
-	                if (walls.get(i).wallTexture.collidesWith(this))
-	                {
-	                	if(!walls.get(i).element.equals("wind"))
-	                	{
-	                		if((walls.get(i).element.equals("fire"))&&(element.equals("fire")))
-	                		{
-	                			damage+=0.1f;
-		                		
-	                		}else
-	                		{
-	                			walls.get(i).attack(damage);
-		                		isRemove=true;
-	                		}
-	                	}else
-	                	{
-	                		Vector2 vecA= new Vector2(speedX,speedY);
-	                		Vector2 vecB= new Vector2(-(float)Math.cos((double)walls.get(i).wallTexture.getRotation()),-(float)Math.sin((double)walls.get(i).wallTexture.getRotation()));
-	                		Vector2 vecC=vecA.add(vecB);
-	                		speedX=vecC.x;
-	                		speedY=vecC.y;
-	                	}
-	                }
-                }
-                if (player.collidesWith(this))
-                {
-                	player.attacked(damage);
-                	isRemove=true;
-                }
-                
-                for(int i=0;i<enemyList.size();i++)
-                if (enemyList.get(i).collidesWith(this))
-                {
-                	enemyList.get(i).attacked(damage);
-                	enemyList.get(i).isAttackted=true;
-                	isRemove=true;
-                }
+            	if(!mScene.wall.get(i).getElement().equals("wind"))
+            	{
+            		if((mScene.wall.get(i).getElement().equals("fire"))&&(element.equals("fire")))
+            		{
+            			damage+=0.1f;
+                		
+            		}else
+            		{
+            			mScene.wall.get(i).attack(damage);
+                		mIsRemove=true;
+            		}
+            	}else
+            	{
+            		Vector2 vecA= new Vector2(mSpeedX,mSpeedY);
+            		Vector2 vecB= new Vector2(-(float)Math.cos((double)mScene.wall.get(i).getRotation()),-(float)Math.sin((double)mScene.wall.get(i).getRotation()));
+            		Vector2 vecC=vecA.add(vecB);
+            		mSpeedX=vecC.x;
+            		mSpeedY=vecC.y;
+            	}
             }
-        };
+        }
+        if (mScene.player.collidesWith(this))
+        {
+        	mScene.player.attacked(damage);
+        	mIsRemove=true;
+        }
+        
+        for(int i=0;i<mScene.enemyList.size();i++)
+        if (mScene.enemyList.get(i).collidesWith(this))
+        {
+        	mScene.enemyList.get(i).attacked(damage);
+        	mScene.enemyList.get(i).isAttackted=true;
+        	mIsRemove=true;
+        }
+        
+        Vector2 temp=new Vector2(mSpeedX,mSpeedY);
+		temp.add(mScene.weather.wind);
+		if(mIsInit)
+		{
+		mFinalX-=temp.x;
+		mFinalY-=temp.y;
+		
+		setX(mFinalX);
+		setY(mFinalY);
+		}
     }
 	
+	/*
+	 * Geting last x and last y components for estimating speed and direction of bulet
+	 * Start bulet fly
+	 * @param x is a last x
+	 * @param y is a last y
+	 * @param time is a stop tap time
+	 */
 	public void startFly(float x, float y, long time)
 	{
-		finalX=x;
-		finalY=y;
+		mFinalX=x;
+		mFinalY=y;
 		
 		
-		speedK/=(time-startTime)*0.01;
-		speedX= speedK*(startX-finalX);
-		speedY= speedK*(startY-finalY);
+		mSpeedK/=(time-mStartTime)*0.01;
+		mSpeedX= mSpeedK*(mStartX-mFinalX);
+		mSpeedY= mSpeedK*(mStartY-mFinalY);
 		
-		player_bulet.setX(finalX);
-		player_bulet.setY(finalY);
+		setX(mFinalX);
+		setY(mFinalY);
 		
-		finalX-=player_bulet.getWidth()/2;
-		finalY-=player_bulet.getHeight()/2;
+		mFinalX-=getWidth()/2;
+		mFinalY-=getHeight()/2;
 	}
 	
+	
+	/*
+	 * using for creating bulet without adding on scene
+	 */
 	public void lastInit(float x, float y, long time)
 	{
-		finalX=x;
-		finalY=y;
-		
+		mFinalX=x;
+		mFinalY=y;
 	}
 	
+	/*
+	 * Adding shadow of bulet
+	 * @param shadow_region is a animated texture of shadow
+	 */
 	public void createShadow(VertexBufferObjectManager vbo,  ITiledTextureRegion shadow_region)
     {
     	AnimatedSprite shadow=new AnimatedSprite(0,0,shadow_region,vbo);
-    	shadow.setSize(player_bulet.getWidth()+30, player_bulet.getHeight()+30);
+    	shadow.setSize(getWidth()+30, getHeight()+30);
     	shadow.setX(shadow.getX()-15);
     	shadow.setY(shadow.getY()-15);    	
     	final long[] SHADOW_ANIMATE = new long[] { 100, 100, 100, 100, 100, 100, 100, 100 };
         shadow.animate(SHADOW_ANIMATE, 0, 7, true);
-    	shadow.setZIndex(player_bulet.getZIndex()-1);
-    	player_bulet.attachChild(shadow);    	
+    	shadow.setZIndex(getZIndex()-1);
+    	attachChild(shadow);    	
     }
-	
-	public void update(Vector2 wind)
-	{
-		Vector2 temp=new Vector2(speedX,speedY);
-		temp.add(wind);
-		if(isInit)
-		{
-		finalX-=temp.x;
-		finalY-=temp.y;
 		
-		player_bulet.setX(finalX);
-		player_bulet.setY(finalY);
-		}
-	}
-	
 	public float getX()
 	{
-		return finalX;
+		return mFinalX;
 	}
 	
 	public float getY()
 	{
-		return finalY;
+		return mFinalY;
 	}
 	
 	

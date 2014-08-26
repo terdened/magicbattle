@@ -1,6 +1,5 @@
 package com.example.gameactive;
 
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -9,14 +8,7 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.util.GLState;
-
-
-import android.opengl.GLES20;
-
 import com.example.gameactive.SceneManager.SceneType;
 
 public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListener, IOnSceneTouchListener 
@@ -60,11 +52,16 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	menuChildScene = new MenuScene(camera);
  	    menuChildScene.setPosition(0, 0);
  	    
- 	    final IMenuItem chooseFire = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_FIRE, resourcesManager.fireElementButton, vbom), 0.8f, 1);
- 	    final IMenuItem chooseWater = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_WATER, resourcesManager.waterElementButton, vbom), 0.8f, 1);
- 	    final IMenuItem chooseEarth = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_EARTH, resourcesManager.earthElementButton, vbom), 0.8f, 1);
- 	    final IMenuItem chooseWind = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_WIND, resourcesManager.windElementButton, vbom), 0.8f, 1);
- 	    final IMenuItem back = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_HIDE_ELEMENTS, resourcesManager.backButton, vbom), 0.8f, 1);
+ 	    final IMenuItem chooseFire = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_FIRE, resourcesManager.fireElementButton, vbom), 0.8f, 1);
+ 	    final IMenuItem chooseWater = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_WATER, resourcesManager.waterElementButton, vbom), 0.8f, 1);
+ 	    final IMenuItem chooseEarth = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_EARTH, resourcesManager.earthElementButton, vbom), 0.8f, 1);
+ 	    final IMenuItem chooseWind = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_WIND, resourcesManager.windElementButton, vbom), 0.8f, 1);
+ 	    final IMenuItem back = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_HIDE_ELEMENTS, resourcesManager.backButton, vbom), 0.8f, 1);
  	    
  	    menuChildScene.addMenuItem(chooseFire);
  	    menuChildScene.addMenuItem(chooseWater);
@@ -82,7 +79,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
  	    back.setPosition(back.getX(), back.getY() + 90);
  	    
  	    menuChildScene.setOnMenuItemClickListener(this);
- 	   scrollMenu.blocked=true;
+ 	   scrollMenu.setBlocked(true);
  	   setChildScene(menuChildScene);
  	   //setChildScene(chooseElement);
     }
@@ -92,7 +89,8 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
 	   this.clearChildScene();
     }
     
-    public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY)
+    public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, 
+    		float pMenuItemLocalY)
     {
             switch(pMenuItem.getID())
             {
@@ -117,7 +115,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
             	this.detachSelf();
             	selectedLevel="none";
             	scrollMenu.clearSelectedLevel();
-            	scrollMenu.blocked=false;
+            	scrollMenu.setBlocked(false);
             	createMainMenuChildScene();
                 return true;
             default:
@@ -130,7 +128,8 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	mainMenuChildScene = new MenuScene(camera);
     	mainMenuChildScene.setPosition(0, 0);
  	    
- 	    final IMenuItem back = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_BACK, resourcesManager.backButton, vbom), 1.2f, 1);
+ 	    final IMenuItem back = new ScaleMenuItemDecorator(
+ 	    		new SpriteMenuItem(MENU_BACK, resourcesManager.backButton, vbom), 1.2f, 1);
  	    
 
  	   mainMenuChildScene.addMenuItem(back);
@@ -150,31 +149,31 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	scrollMenu=new ScrollableMenu();
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	
-    	scrollMenu.circlesList.getLast().addButton(100, 150, resourcesManager.sokrat_region, vbom, "sokrat",this);
-    	scrollMenu.circlesList.getLast().addButton(0, 800, resourcesManager.haron_region, vbom, "haron",this);
-    	
-    	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
-    	
-    	scrollMenu.circlesList.getLast().addButton(100, 150, resourcesManager.dorian_region, vbom, "dorian",this);
+    	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.sokrat_region, vbom, "1",this);
+    	scrollMenu.getCirclesList().getLast().addButton(0, 800, resourcesManager.haron_region, vbom, "haron",this);
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
+    	
+    	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.dorian_region, vbom, "dorian",this);
+    	
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
-    	attachChild(scrollMenu.circlesList.getLast().scene);
-    	scrollMenu.circlesList.getLast().addButton(50, 150, resourcesManager.veider_region, vbom, "veider",this);
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
+    	scrollMenu.addCircle(resourcesManager, vbom);    
+    	attachChild(scrollMenu.getCirclesList().getLast().getScene());
+    	scrollMenu.getCirclesList().getLast().addButton(50, 150, resourcesManager.veider_region, vbom, "veider",this);
     }
     
     @Override
@@ -239,12 +238,12 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
             	
             	if(selectedLevel=="none")
             	{
-	            	for(int i=0;i<scrollMenu.circlesList.size();i++)
+	            	for(int i=0;i<scrollMenu.getCirclesList().size();i++)
 	            	{
-	            		if(scrollMenu.circlesList.get(i).selectedLevel!="none")
+	            		if(scrollMenu.getCirclesList().get(i).getSelectedLevel()!="none")
 	            		{
 	            			createChooseElement();
-	            			selectedLevel=scrollMenu.circlesList.get(i).selectedLevel;
+	            			selectedLevel=scrollMenu.getCirclesList().get(i).getSelectedLevel();
 	            		}
 	            	}
             	}
