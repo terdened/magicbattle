@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.andengine.engine.camera.hud.HUD;
+import org.andengine.entity.Entity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -63,6 +64,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public PhysicsWorld physicsWorld;
 	public String levelName;
 	public Level mLevel;
+	public Entity mBackground;
 	//End variables
 	
 	public void addTextList(LinkedList<TextInformHolder> tempList,float width)
@@ -82,7 +84,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public GameScene(String element, String level)
 	{
 		levelName=level;
-		
 		try
 	    {
 		    SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -125,13 +126,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     @Override
     public void createScene()
     {
+
+		mBackground = new Entity();
+		this.attachChild(mBackground);
     	gameSceneCreator=new GameSceneCreator(this);
     	gameSceneEventController= new GameSceneEventsController(this);
-    	gameSceneCreator.createBackground();
        
         //createControllers();
     	gameSceneCreator.createPhysics();
-        //createRiver();
+        //createRiver();s
         
         buletCount=0;
 
@@ -168,8 +171,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	camera.setHUD(null);
         camera.setCenter(640, 400);
         camera.setChaseEntity(null);
-        // TODO code responsible for disposing scene
-        // removing all game scene objects.
     }
     
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
@@ -180,7 +181,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     public void attachLevelHolder(Level pLevel)
     {
     	mLevel=pLevel;
-    	this.attachChild(mLevel);
+    	mBackground.attachChild(mLevel);
     }
     
     

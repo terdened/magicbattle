@@ -171,7 +171,7 @@ public class ResourcesManager
     private void loadGameGraphics(String element, String level)
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-	    mGameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+	    mGameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
 	    	   
 	    objectsList=new LinkedList <ITextureRegion>();
 	    
@@ -225,10 +225,8 @@ public class ResourcesManager
 		}
 	    if(level.equals("1"))
 	    {
-	    	enemys_regions=new ITiledTextureRegion[4];
-	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Sokrat.png", 6, 3);	
-	    	enemys_regions[1]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
-	    	enemys_regions[2]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
+	    	enemys_regions=new ITiledTextureRegion[1];
+	    	enemys_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
 	    	
 		    enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
 			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);

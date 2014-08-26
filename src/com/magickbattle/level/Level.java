@@ -4,6 +4,7 @@ package com.magickbattle.level;
 import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.sprite.Sprite;
 
 import com.example.gameactive.GameScene;
 
@@ -12,8 +13,12 @@ public class Level extends Entity{
 	private final GameScene mGameScene;
 	private int mWidth;
 	private int mHeight;
-	public LinkedList<LevelObject> mObjectsList;
 	
+	private Entity mBackLayer;
+	private Entity mMiddleLayer;
+	private Entity mFrontLayer;
+	
+	public LinkedList<LevelObject> mObjectsList;
 	
 	public Level(int pWidth, int pHeight, final GameScene pGameScene)
 	{
@@ -21,8 +26,16 @@ public class Level extends Entity{
 		mWidth=pWidth;
 		mHeight=pHeight;
 		mObjectsList = new LinkedList<LevelObject>();
-		this.setScale(pWidth, pHeight);
+		//this.set(pWidth, pHeight);
+		
+		mBackLayer = new Entity();
+		mMiddleLayer = new Entity();
+		mFrontLayer = new Entity();
 
+		this.attachChild(mBackLayer);
+		this.attachChild(mMiddleLayer);
+		this.attachChild(mFrontLayer);
+		
 		InitCamera();
 	}
 	
@@ -32,10 +45,22 @@ public class Level extends Entity{
 		mGameScene.camera.setBoundsEnabled(true);
 	}
 	
-	private void attachObject(LevelObject pObject)
+	public void attachBackground(Sprite pBackground)
+	{
+		float width=mWidth*80;
+		float height=mHeight*80;
+		
+		pBackground.setSize(width,height);
+
+		
+		mBackLayer.attachChild(pBackground);
+	}
+
+	
+	public void attachObject(LevelObject pObject)
 	{
 		mObjectsList.add(pObject);
-		this.attachChild(pObject);
+		mMiddleLayer.attachChild(pObject);
 	}
 
 }

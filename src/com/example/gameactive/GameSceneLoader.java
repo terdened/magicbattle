@@ -63,9 +63,43 @@ public class GameSceneLoader {
 	            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
 	            
 	            Level level = new Level(width, height, sceneHolder);
+	            Sprite background = new Sprite(0,0,
+	            		sceneHolder.resourcesManager.gamebkg_region,sceneHolder.vbom);
+	            level.attachBackground(background);
 	            sceneHolder.attachLevelHolder(level);
 
 	            return sceneHolder;
+	        }
+	    });
+	    
+	    levelLoader.registerEntityLoader("object",new IEntityLoader()
+	    {
+	        public IEntity onLoadEntity(final String pEntityName, final Attributes pAttributes) 
+	        {
+	        	final int x = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_X);
+	            final int y = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_Y);
+	            final String type = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_TYPE);
+	            final String value = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_VALUE);
+	            
+	            
+	            if(type.equals("stone"))
+	            {
+	            	StoneLevelObject object = new StoneLevelObject(x, y,
+	            			sceneHolder.resourcesManager.stone_region, sceneHolder.vbom);
+	            	
+	            	sceneHolder.mLevel.attachObject(object);
+	            	
+	                FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+                	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+                	Body objectBody;
+                	objectBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, object, 
+                			BodyType.StaticBody, FIXTURE_DEF);
+                	objectBody.setUserData("object");
+                	sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(object, 
+                			objectBody, true, false));
+	            }
+
+	            return null;
 	        }
 	    });
 	       
@@ -201,7 +235,7 @@ public class GameSceneLoader {
 	            else
             	if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY))
 	            {
-	            	ITiledTextureRegion player_region=sceneHolder.resourcesManager.enemys_regions[sceneHolder.enemyList.size()];
+	            	ITiledTextureRegion player_region=sceneHolder.resourcesManager.enemys_regions[0];
 	            	
 		            final String element = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_ELEMENT);
 		            final String name = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ENTITY_ATTRIBUTE_NAME);	
@@ -367,25 +401,6 @@ public class GameSceneLoader {
 		                sceneHolder.enemyStatus.add(new PlayerStatus(enemy.getWidth(), sceneHolder,
 		                		sceneHolder.enemyList.getLast()));
 		                sceneHolder.attachChild(sceneHolder.enemyStatus.getLast());
-	            }
-	            else
-            	if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_STONE))
-	            {
-		            		
-	                StoneLevelObject object = new StoneLevelObject((int)x, (int)y, 
-	                		sceneHolder.resourcesManager.stone_region, sceneHolder.vbom);
-	                
-	                object.setRotation(Float.parseFloat(rotation));
-	                FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-                	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-                	Body objectBody;
-                	objectBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, object, 
-                			BodyType.StaticBody, FIXTURE_DEF);
-                	objectBody.setUserData("object");
-                	sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(object, 
-                			objectBody, true, false));
-                	
-	                levelObject = object;
 	            }
             	else
 	            {

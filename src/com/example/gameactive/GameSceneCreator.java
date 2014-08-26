@@ -100,34 +100,6 @@ public class GameSceneCreator {
     	attachChild(river);
     	*/
     }
-    
-    public void createBackground()
-    {
-    	
-    	
-    	sceneHolder.bckgr = new Sprite(0, 0, sceneHolder.resourcesManager.gamebkg_region, sceneHolder.vbom)
-    	{
-    	    @Override
-    	    protected void preDraw(GLState pGLState, Camera pCamera) 
-    	    {
-    	       super.preDraw(pGLState, pCamera);
-    	       pGLState.enableDither();
-    	    }
-    	};
-    	sceneHolder.bckgr.setRotation(90);        
-    	sceneHolder.bckgr.setScale(1.65f,1.8f);
-    	sceneHolder.bckgr.setPosition(0, 400);
-    	sceneHolder.attachChild(sceneHolder.bckgr);
-        /*attachChild(new Sprite(0, 0, resourcesManager.menu_background_region, vbom)
-        {
-            @Override
-            protected void preDraw(GLState pGLState, Camera pCamera) 
-            {
-                super.preDraw(pGLState, pCamera);
-                pGLState.enableDither();
-            }
-        });*/
-    }
 	
     public void createControllers()
 	{
