@@ -1,0 +1,427 @@
+/*
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.magickbattle.engine;
+
+
+import java.util.LinkedList;
+import org.andengine.engine.Engine;
+import org.andengine.engine.camera.BoundCamera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
+import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.debug.Debug;
+import android.graphics.Color;
+
+/*
+ * Control loading and destroing resources
+ * @author Denis Terehin
+ */
+public class ResourcesManager
+{
+	private BitmapTextureAtlas mSplashTextureAtlas;
+	private BuildableBitmapTextureAtlas mMenuTextureAtlas;
+	private BuildableBitmapTextureAtlas mGameTextureAtlas;
+    private static final ResourcesManager INSTANCE = new ResourcesManager();
+	private BuildableBitmapTextureAtlas playerMenuTextureAtlas;
+	
+	public ITextureRegion splash_region;
+	public ITextureRegion play_region;
+	public ITextureRegion options_region;
+	public ITextureRegion limb_region;
+	public ITextureRegion sokrat_region;
+	public ITextureRegion haron_region;
+	public ITextureRegion veider_region;
+	public ITextureRegion dorian_region;
+	public ITextureRegion base_region;
+	public ITextureRegion knob_region;
+	public ITiledTextureRegion player_region;
+	public ITiledTextureRegion eye_region;
+	public ITiledTextureRegion mobs_regions[];
+	public ITiledTextureRegion enemy_region;
+	public ITextureRegion enemy_bulet_region;
+	public ITextureRegion enemy_buf_region;
+	public ITextureRegion enemy_debuf_region;
+	public ITiledTextureRegion enemy_wall_region;
+	public ITiledTextureRegion enemyBuletTail;
+	public ITiledTextureRegion enemyElementMagic;
+	public ITiledTextureRegion rain;
+	public ITiledTextureRegion playerBuletTail;
+	public ITiledTextureRegion player_region_water;
+	public ITiledTextureRegion player_region_fire;
+	public ITiledTextureRegion dark_shadow;
+	public ITiledTextureRegion light_shadow;
+	public ITiledTextureRegion healthDownBuf;
+	public ITiledTextureRegion healthUpBuf;
+	public ITiledTextureRegion speedUpBuf;
+	public ITiledTextureRegion speedDownBuf;
+	public ITextureRegion gamebkg_region;
+	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
+	public ITextureRegion river_region;
+	public ITiledTextureRegion stone_region;
+	public ITiledTextureRegion whole_region;
+	public ITextureRegion edge_region;
+	public ITextureRegion player_bulet_region;
+	public ITextureRegion player_buf_region;
+	public ITextureRegion player_debuf_region;
+	public ITiledTextureRegion wall_region;
+	public ITiledTextureRegion bulet_icon;
+	public ITiledTextureRegion wall_icon;
+	public ITiledTextureRegion nature_icon;
+	public ITiledTextureRegion buf_icon;
+	public ITiledTextureRegion debuf_icon;
+	public ITextureRegion healthPlusIcon;
+	public ITextureRegion healthMinusIcon;
+	public ITextureRegion speedPlusIcon;
+	public ITextureRegion speedMinusIcon;
+	public ITextureRegion healthLine;
+	public ITextureRegion manaLine;
+	public ITextureRegion fireElementButton;
+	public ITextureRegion waterElementButton;
+	public ITextureRegion earthElementButton;
+	public ITextureRegion windElementButton;
+	public ITextureRegion backButton;
+    public Engine engine;
+    public GameActivity activity;
+    public BoundCamera camera;
+    public VertexBufferObjectManager vbom;
+    public Font font;
+    
+    //---------------------------------------------
+    // TEXTURES & TEXTURE REGIONS
+    //---------------------------------------------
+    
+    //---------------------------------------------
+    // CLASS LOGIC
+    //---------------------------------------------
+
+    
+
+    private void loadMenuFonts()
+    {
+    	FontFactory.setAssetBasePath("font/");
+        final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+        font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "font.TTF", 50, true, Color.WHITE, 2, Color.BLACK);
+        font.load();
+    }
+    
+    public void loadMenuResources()
+    {
+    	loadMenuGraphics();
+        loadMenuAudio();
+        loadMenuFonts();
+    }
+    
+    public void loadGameResources(String element, String level)
+    {
+        loadGameGraphics(element, level);
+        loadGameFonts();
+        loadGameAudio();
+    }
+    
+    private void loadMenuGraphics()
+    {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
+    	mMenuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+    	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "play.png");
+    	options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "options.png");
+    	
+    	
+    	try 
+    	{
+    	    this.mMenuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.mMenuTextureAtlas.load();
+    	} 
+    	catch (final TextureAtlasBuilderException e)
+    	{
+    	        Debug.e(e);
+    	}
+    }
+    
+    
+    private void loadMenuAudio()
+    {
+        
+    }
+
+    private void loadGameGraphics(String element, String level)
+    {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+	    mGameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+	    	   
+	    objectsList=new LinkedList <ITextureRegion>();
+	    
+	    player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 8, 1);
+	    edge_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
+	    if(element=="water")
+	    {
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1);   
+	    }
+	    if(element=="fire")
+	    {
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerFire.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/fire_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/fireWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/fireTail.png", 8, 1);
+	    }
+	    if(element=="earth")
+	    {
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerEarth.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/earth_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/earthWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/earthTail.png", 8, 1);
+	    }
+	    if(element=="wind")
+	    {
+	    	player_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWind.png", 6, 3);
+	    	player_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/wind_bulet.png");
+		    wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/windWall.png", 8, 1);
+		    playerBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/windTail.png", 8, 1);
+	    }
+	    
+	    
+	    if(level.equals("veider"))
+	    {
+	    	river_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
+		  
+	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/DarthVader.png", 8, 1);	
+	    	
+		    //enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/DarthVader.png", 8, 1);	
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");  
+			enemy_buf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_buf.png");  
+			enemy_debuf_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_debuf.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		}
+	    if(level.equals("1"))
+	    {
+	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
+	    	
+		    enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		}
+	    if(level.equals("dorian"))
+	    {
+	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Dorian.png", 6, 3);	
+	    	
+	    	
+		    enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		}
+	    if(level.equals("2"))
+	    {
+	    	
+	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);	
+	    	
+	    	mobs_regions = new ITiledTextureRegion[1];
+	    	mobs_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "mobs/Soul.png", 4, 5);	
+	    	
+	    	ITextureRegion edge=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
+		    objectsList.add(edge);
+		    //enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "characters/Haron.png", 8, 1);	
+			enemy_bulet_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+			enemy_wall_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+		    enemyBuletTail=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		    enemyElementMagic=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/stormtrooper.png", 8, 1);
+		}
+	    gamebkg_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/"+level+"Background.png");
+	    stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
+	    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/whole.png", 4, 3); 
+	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
+	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
+	    
+	    speedDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/speedDownBuf.png", 8, 1);
+	    speedUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/speedUpBuf.png", 8, 1);
+	    healthDownBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/healthDownBuf.png", 8, 1);
+	    healthUpBuf=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/healthUpBuf.png", 8, 1);
+	    
+	    manaLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/manaLine.png");
+	    healthLine=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthLine.png");
+	    healthPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthPlusIcon.png");
+		healthMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/healthMinusIcon.png");
+		speedPlusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/speedPlusIcon.png");
+		speedMinusIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "icons/speedMinusIcon.png");
+	   	    
+	    bulet_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/buleticon.png", 2, 1);
+		wall_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/wallicon.png", 2, 1);
+		nature_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/natureicon.png", 2, 1);
+		buf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/buficon.png", 2, 1);
+		debuf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/debuficon.png", 2, 1);
+		 
+	    try 
+	    {
+	        this.mGameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+	        this.mGameTextureAtlas.load();
+	    } 
+ 	    catch (final TextureAtlasBuilderException e)
+	    {
+	        Debug.e(e);
+	    } 	
+    }
+    
+    private void loadGameFonts()
+    {
+    	FontFactory.setAssetBasePath("font/");
+        final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+        font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "font.TTF", 50, true, Color.WHITE, 2, Color.BLACK);
+        font.load();
+    }
+    
+    private void loadGameAudio()
+    {
+        
+    }
+    
+    public void unloadGameTextures()
+    {
+        
+    }
+    
+    public void unloadMenuTextures()
+    {
+        
+    }
+        
+    public void loadMenuTextures()
+    {
+        
+    }
+    
+    public void loadSplashScreen()
+    {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+    	mSplashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+    	splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mSplashTextureAtlas, activity, "splash.png", 0, 0);
+    	mSplashTextureAtlas.load();
+    }
+    
+    public void unloadSplashScreen()
+    {
+    	mSplashTextureAtlas.unload();
+    	splash_region = null;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void loadPlayerMenuResources()
+    {
+    	loadPlayerMenuGraphics();
+        loadPlayerMenuAudio();
+        //loadPlayerMenuFonts();
+    }
+    
+    
+    public void loadPlayerMenuGraphics()
+    {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/playerMenu/");
+    	playerMenuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
+    	fireElementButton= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "fire.png");
+    	waterElementButton= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "water.png");
+    	earthElementButton= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "earth.png");
+    	windElementButton= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "wind.png");
+    	backButton= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "back.png");
+    	
+    	limb_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "limbBackground.png");
+    	
+    	sokrat_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "sokrat.png");
+    	veider_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "veider.png");
+    	haron_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "haron.png");
+    	dorian_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerMenuTextureAtlas, activity, "dorian.png");
+    	
+    	this.playerMenuTextureAtlas.load();
+    	try 
+    	{
+    	    this.playerMenuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    
+    	} 
+    	catch (final TextureAtlasBuilderException e)
+    	{
+    	        Debug.e(e);
+    	}
+    }
+    
+    public void unloadPlayerMenuTextures()
+    {
+        
+    }
+        
+    public void loadPlayerMenuTextures()
+    {
+    	loadPlayerMenuGraphics();
+    }
+    
+    private void loadPlayerMenuAudio()
+    {
+        
+    }
+    
+    
+    
+    
+    /**
+     * @param engine
+     * @param activity
+     * @param camera
+     * @param vbom
+     * <br><br>
+     * We use this method at beginning of game loading, to prepare Resources Manager properly,
+     * setting all needed parameters, so we can latter access them from different classes (eg. scenes)
+     */
+    public static void prepareManager(Engine engine, GameActivity activity, BoundCamera camera, VertexBufferObjectManager vbom)
+    {
+        getInstance().engine = engine;
+        getInstance().activity = activity;
+        getInstance().camera = camera;
+        getInstance().vbom = vbom;
+    }
+    
+    //---------------------------------------------
+    // GETTERS AND SETTERS
+    //---------------------------------------------
+    
+    public static ResourcesManager getInstance()
+    {
+        return INSTANCE;
+    }
+}
+
