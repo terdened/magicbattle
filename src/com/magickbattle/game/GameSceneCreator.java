@@ -18,7 +18,7 @@ import android.opengl.GLES20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.magickbattle.game.charater.Enemy;
+import com.magickbattle.game.character.Enemy;
 import com.magickbattle.game.gui.MagicBar;
 import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.Wall;

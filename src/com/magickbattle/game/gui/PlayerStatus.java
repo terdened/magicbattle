@@ -21,7 +21,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.magickbattle.game.GameScene;
-import com.magickbattle.game.charater.Player;
+import com.magickbattle.game.character.Player;
 
 /*
  * Content player states

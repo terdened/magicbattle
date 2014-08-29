@@ -27,7 +27,7 @@ import com.magickbattle.game.level.StoneLevelObject;
 import com.magickbattle.game.level.WholeLevelObject;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.MagicParser;
-import com.magickbattle.game.charater.*;
+import com.magickbattle.game.character.*;
 import com.magickbattle.game.gui.PlayerStatus;
 
 public class GameSceneLoader {

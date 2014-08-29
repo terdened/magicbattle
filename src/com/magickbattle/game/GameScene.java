@@ -9,6 +9,7 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
@@ -19,8 +20,8 @@ import com.magickbattle.engine.BaseScene;
 import com.magickbattle.engine.ResourcesManager;
 import com.magickbattle.engine.SceneManager;
 import com.magickbattle.engine.SceneManager.SceneType;
-import com.magickbattle.game.charater.Enemy;
-import com.magickbattle.game.charater.Player;
+import com.magickbattle.game.character.Enemy;
+import com.magickbattle.game.character.Player;
 import com.magickbattle.game.gui.InformText;
 import com.magickbattle.game.gui.MagicBar;
 import com.magickbattle.game.gui.PlayerStatus;
@@ -203,6 +204,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     public void detachEnemy(Enemy pEnemy)
     {
     	mEnemyList.remove(pEnemy);
+    	physicsWorld.destroyBody(pEnemy.body);
     	this.detachChild(pEnemy);
     }
     

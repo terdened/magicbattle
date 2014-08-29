@@ -3,8 +3,8 @@ package com.magickbattle.game;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.magickbattle.game.charater.Enemy;
-import com.magickbattle.game.charater.Player;
+import com.magickbattle.game.character.Enemy;
+import com.magickbattle.game.character.Player;
 import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.PlayerMagic;
 import com.magickbattle.game.magick.Wall;
