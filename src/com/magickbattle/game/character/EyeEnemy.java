@@ -9,6 +9,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import com.badlogic.gdx.math.Vector2;
 import com.magickbattle.engine.ResourcesManager;
 import com.magickbattle.game.GameScene;
 import com.magickbattle.game.ai.EyeAI;
@@ -142,44 +143,41 @@ public class EyeEnemy extends Enemy{
 	}
 	
 	
-	@Override
-    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) 
-    {
-    	if (pSceneTouchEvent.isActionDown())
-        {
-    		mScene.touchEnemy=true;
-        }
-    	
-        if (pSceneTouchEvent.isActionUp())
-        {
-        	if(mScene.touchEnemy)
-        	{
-        		this.setBuf(this.oppositeMagic.debufPower, this.oppositeMagic.debufTime, this.oppositeMagic.debufType);
-        	}
-        	mScene.freeEnemy=true;
-        	mScene.touchEnemy=false;
-        }
-        return true;
-    }
+	
 	
 	
 	public void goWhileWaiting()
 	{
-		float newX = this.playerX+(float)Math.random()*100-50;
-		float newY = this.playerY+(float)Math.random()*100-50;
+		float newX = this.playerX+(float)Math.random()*200-100;
+		float newY = this.playerY+(float)Math.random()*200-100;
 		
 		this.setDest(newX, newY);
 	}
 	
-	public void goToPlayer()
+	public void goToPlayer(float pDistance)
 	{
+		Vector2 distance = new Vector2();
 		
+		distance.x = getX()- mScene.player.getX();
+		distance.y = getY()- mScene.player.getY();
+		
+		if(distance.len()>200)
+		{
+			float tan=(this.getX()-mScene.player.playerX)/(mScene.player.playerY-this.getY());
+			float alpha=(float)Math.atan(tan);
+			alpha+=Math.toRadians(90);
+			
+		 	float distX=(float)(this.getX()+this.getWidth()/2+pDistance*Math.cos(alpha));
+		 	float distY=(float)(this.getY()+this.getHeight()/2+pDistance*Math.sin(alpha));
+	
+		 	this.setDest(distX, distY);
+		}
 	}
 	
-	 public void attackPlayer(float playerX, float playerY)
-	 {
+	public void attackPlayer(float playerX, float playerY)
+	{
 	 		
-	 }
+	}
 	
 	public void attackPlayer()
 	{

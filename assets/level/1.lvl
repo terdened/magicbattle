@@ -89,11 +89,11 @@
 	<object x="0" y="18" rotation="0" type="stone" value="0"/>
 	<object x="1" y="18" rotation="0" type="stone" value="0"/>
 	<object x="2" y="18" rotation="0" type="stone" value="0"/>
-    <entity x="1" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="sokrat"/>
-	<entity x="4" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="aristotel"/>
-	<entity x="6" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="platon"/>
-	<entity x="0" y="16" rotation="0" type="enemy" element="wind" value="enemy" name="platon"/>
-	<entity x="5" y="10" rotation="0" type="enemy" element="wind" value="enemy" name="platon"/>
-	<entity x="6" y="12" rotation="0" type="enemy" element="wind" value="enemy" name="platon"/>
+    <entity x="1" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
+	<entity x="4" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
+	<entity x="6" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
+	<entity x="0" y="16" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
+	<entity x="5" y="10" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
+	<entity x="6" y="12" rotation="0" type="enemy" element="wind" value="enemy" name="eye"/>
     <entity x="3" y="28" rotation="0" type="player" value="player"/>
 </level>

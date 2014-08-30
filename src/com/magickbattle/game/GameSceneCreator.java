@@ -152,11 +152,11 @@ public class GameSceneCreator {
 		sceneHolder.gameHUD.registerTouchArea(sceneHolder.magicBar.bufIcon);
 		sceneHolder.gameHUD.registerTouchArea(sceneHolder.magicBar.debufIcon);
 		
-		sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.buletIcon);
-		sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.wallIcon);
-		sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.natureIcon);
-		sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.bufIcon);
-		sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.debufIcon);
+		//sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.buletIcon);
+		//sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.wallIcon);
+		//sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.natureIcon);
+		//sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.bufIcon);
+		//sceneHolder.gameHUD.attachChild(sceneHolder.magicBar.debufIcon);
 		
 	}
 	

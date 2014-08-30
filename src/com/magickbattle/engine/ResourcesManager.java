@@ -59,6 +59,7 @@ public class ResourcesManager
 	public ITextureRegion knob_region;
 	public ITiledTextureRegion player_region;
 	public ITiledTextureRegion eye_region;
+	public ITiledTextureRegion bat_region;
 	public ITiledTextureRegion mobs_regions[];
 	public ITiledTextureRegion enemy_region;
 	public ITextureRegion enemy_bulet_region;
@@ -232,6 +233,7 @@ public class ResourcesManager
 	    if(level.equals("dorian"))
 	    {
 	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Dorian.png", 6, 3);	
+	    	bat_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);	
 	    	
 	    	
 		    enemy_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Sokrat.png", 8, 1);	
@@ -243,7 +245,8 @@ public class ResourcesManager
 	    if(level.equals("2"))
 	    {
 	    	
-	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);	
+	    	bat_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);	
+	    	eye_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
 	    	
 	    	mobs_regions = new ITiledTextureRegion[1];
 	    	mobs_regions[0]=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "mobs/Soul.png", 4, 5);	

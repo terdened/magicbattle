@@ -258,6 +258,9 @@ public class GameSceneLoader {
 	                		sceneHolder, sceneHolder.player);
 	                sceneHolder.player.stayAnimation();
 	                sceneHolder.attachChild(sceneHolder.playerStatus);
+
+	                sceneHolder.registerTouchArea(sceneHolder.player);
+	                sceneHolder.registerTouchArea(sceneHolder.player.shadow);
 	            }
 	            else
             	if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_ENEMY))
@@ -272,11 +275,19 @@ public class GameSceneLoader {
 		                enemy = new EyeEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
 		            else
+	            	if(name.equals("bat"))
+		                enemy = new BatEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
+		            else
 		            	enemy = new EyeEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
 	               
 	                levelObject = enemy;
+
+	                
 	                sceneHolder.attachEnemy(enemy);
+	                sceneHolder.registerTouchArea(enemy);
+	                //sceneHolder.registerTouchArea(enemy.shadow);
 	            }
             	else
 	            {

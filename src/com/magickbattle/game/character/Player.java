@@ -123,7 +123,7 @@ public abstract class Player extends AnimatedSprite
      * @param camera is a camera
      * @param physicsWorld is a objects environment
      */
-	private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
+	protected void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{        
 	    body = PhysicsFactory.createCircleBody(physicsWorld, this, BodyType.DynamicBody, 
 	    		PhysicsFactory.createFixtureDef(0, 0, 0));
@@ -225,7 +225,7 @@ public abstract class Player extends AnimatedSprite
 				 speedX=0;
 				 speedY=0;
 				 body.setLinearVelocity(new Vector2(0, 0));
-				 this.setRotation(0);
+				 //this.setRotation(0);
 
 				 
 			 }
@@ -239,7 +239,7 @@ public abstract class Player extends AnimatedSprite
 				 speedX=0;
 				 speedY=0;
 				 body.setLinearVelocity(new Vector2(0, 0));
-				 this.setRotation(0);
+				 //this.setRotation(0);
 				 mLastX=-100;
 				 mLastY=-100;
 			 }
@@ -436,6 +436,8 @@ public abstract class Player extends AnimatedSprite
 			 isDead=true;
 		 }
 		 
+		 if(health>maxHealth)
+			 health=maxHealth;
 		 
 	 }
 	 

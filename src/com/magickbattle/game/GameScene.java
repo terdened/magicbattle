@@ -117,8 +117,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    }
 		
 		loadLevel(1);
-        this.registerTouchArea(player);
-        this.registerTouchArea(player.shadow);
+        
         
         gameSceneCreator.createHUD();
         gameSceneCreator.createMagicBar();
@@ -204,7 +203,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     public void detachEnemy(Enemy pEnemy)
     {
     	mEnemyList.remove(pEnemy);
-    	physicsWorld.destroyBody(pEnemy.body);
+    	
+    	if(pEnemy.body!=null)
+    		physicsWorld.destroyBody(pEnemy.body);
+    	
+    	this.unregisterTouchArea(pEnemy);
     	this.detachChild(pEnemy);
     }
     

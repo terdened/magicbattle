@@ -18,14 +18,19 @@ package com.magickbattle.game.character;
 import java.util.LinkedList;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.magickbattle.game.GameScene;
 import com.magickbattle.game.GameState;
 import com.magickbattle.game.ai.BasicAI;
 import com.magickbattle.game.gui.TextInformHolder;
+import com.magickbattle.game.magick.Effect;
 
 
 /*
@@ -106,6 +111,30 @@ public abstract class Enemy extends Player
 		
 		return false;
 	}
+	
+	@Override
+    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) 
+    {
+    	if (pSceneTouchEvent.isActionDown())
+        {
+    		mScene.touchEnemy=true;
+        }
+    	
+        if (pSceneTouchEvent.isActionUp())
+        {
+        	if(mScene.touchEnemy)
+        	{
+        		float k=mScene.player.getMana(mScene.player.playerMagic.debufCost);
+        		if(k>0.3)
+        		this.setBuf(mScene.player.playerMagic.debufPower, 
+        				(long)(mScene.player.playerMagic.debufTime*k),
+        				mScene.player.playerMagic.debufType);
+        	}
+        	mScene.freeEnemy=true;
+        	mScene.touchEnemy=false;
+        }
+        return true;
+    }
 	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) 

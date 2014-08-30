@@ -40,7 +40,7 @@ public class EyeAI extends BasicAI{
 				
 				this.mActionsList.add(waitAction);
 				
-				AITrigger attackTrigger = new AITrigger("attack"){
+				AITrigger distanceTrigger = new AITrigger("attack"){
 
 					@Override
 					public Boolean getState() 
@@ -57,7 +57,35 @@ public class EyeAI extends BasicAI{
 					}
 				};
 				
+				this.mTriggerList.add(distanceTrigger);
+				
+				AITrigger attackTrigger = new AITrigger("attack"){
+
+					@Override
+					public Boolean getState() 
+					{
+						if(mThisEnemy.health!=mThisEnemy.maxHealth)
+							return true;
+						else
+							return false;
+					}
+				};
+				
 				this.mTriggerList.add(attackTrigger);
+				
+				AITrigger dieTrigger = new AITrigger("die"){
+
+					@Override
+					public Boolean getState() 
+					{
+						if(mThisEnemy.health<=0)
+							return true;
+						else
+							return false;
+					}
+				};
+				
+				this.mTriggerList.add(dieTrigger);
 			}
 		};
 		
@@ -74,6 +102,16 @@ public class EyeAI extends BasicAI{
 			@Override
 			public void initState() 
 			{
+				AIAction goToPlayerAction = new AIAction(){
+
+					@Override
+					public void implementAction() {
+						final EyeEnemy tempEnemy = (EyeEnemy)mThisEnemy;
+						tempEnemy.goToPlayer(100);
+					}};
+				
+				this.mActionsList.add(goToPlayerAction);
+				
 				AIAction attackAction = new AIAction(){
 
 					@Override
@@ -84,14 +122,28 @@ public class EyeAI extends BasicAI{
 				
 				this.mActionsList.add(attackAction);
 				
-				AIAction goToPlayerAction = new AIAction(){
+				AIAction waitAction = new AIAction(){
 
 					@Override
 					public void implementAction() {
-						mThisEnemy.waitHere(100);
+						mThisEnemy.waitHere(50);
 					}};
 				
-				this.mActionsList.add(goToPlayerAction);
+				this.mActionsList.add(waitAction);
+				
+				AITrigger dieTrigger = new AITrigger("die"){
+
+					@Override
+					public Boolean getState() 
+					{
+						if(mThisEnemy.health<=0)
+							return true;
+						else
+							return false;
+					}
+				};
+				
+				this.mTriggerList.add(dieTrigger);
 			}
 		};
 		
@@ -101,7 +153,24 @@ public class EyeAI extends BasicAI{
 	
 	private void addDieState()
 	{
+		AIState tempState = new AIState(){
+
+			@Override
+			public void initState() 
+			{
+				AIAction waitAction = new AIAction(){
+
+					@Override
+					public void implementAction() {
+						mThisEnemy.waitHere(0);
+					}};
+				
+				this.mActionsList.add(waitAction);
+			}
+		};
 		
+		tempState.mStateTitle="die";
+		this.mStatesList.add(tempState);
 	}
 
 	
