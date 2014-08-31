@@ -57,11 +57,29 @@ public abstract class Enemy extends Player
 	 }
 	
 	 /*
-	  * Initializtion of AI
+	  * Initialization of AI
 	  */
 	 public void initAI()
 	 {
 	 }
+	 
+	protected void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
+	{        
+	    body = PhysicsFactory.createCircleBody(physicsWorld, this, BodyType.DynamicBody, 
+	    		PhysicsFactory.createFixtureDef(0, 0, 0));
+	    this.effects = new LinkedList<Effect>();
+	    body.setUserData("player");
+	    body.setFixedRotation(true);  
+	    physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, false)
+	    {
+	        @Override
+	        public void onUpdate(float pSecondsElapsed)
+	        {
+	            super.onUpdate(pSecondsElapsed);
+	            camera.onUpdate(0.1f);                   
+	        }
+	    });
+	}
 	 
 	 /*
 	  * Method return the best action in current situation

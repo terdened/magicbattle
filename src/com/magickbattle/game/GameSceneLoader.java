@@ -93,7 +93,7 @@ public class GameSceneLoader {
 	            			sceneHolder.resourcesManager.stone_region, sceneHolder.vbom);
 	            	
 	            	sceneHolder.mLevel.attachObject(object);
-	            	
+
 	                FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
                 	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
                 	Body objectBody;

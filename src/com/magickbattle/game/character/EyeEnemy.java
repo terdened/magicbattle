@@ -163,12 +163,21 @@ public class EyeEnemy extends Enemy{
 		
 		if(distance.len()>200)
 		{
-			float tan=(this.getX()-mScene.player.playerX)/(mScene.player.playerY-this.getY());
+			float tan=Math.abs((this.getX()-mScene.player.playerX)/(this.getY()-mScene.player.playerY));
 			float alpha=(float)Math.atan(tan);
 			alpha+=Math.toRadians(90);
 			
-		 	float distX=(float)(this.getX()+this.getWidth()/2+pDistance*Math.cos(alpha));
-		 	float distY=(float)(this.getY()+this.getHeight()/2+pDistance*Math.sin(alpha));
+			int xSign=1;
+			int ySign=1;
+			
+			if(this.getX()<mScene.player.playerX)
+				xSign=-1;
+			
+			if(this.getY()>mScene.player.playerY)
+				ySign=-1;
+			
+		 	float distX=(float)(this.getX()+this.getWidth()/2+xSign*pDistance*Math.cos(alpha));
+		 	float distY=(float)(this.getY()+this.getHeight()/2+ySign*pDistance*Math.sin(alpha));
 	
 		 	this.setDest(distX, distY);
 		}
@@ -181,9 +190,18 @@ public class EyeEnemy extends Enemy{
 	
 	public void attackPlayer()
 	{
-		 float tan=(this.getX()-mScene.player.playerX)/(mScene.player.playerY-this.getY());
- 		 float alpha=(float)Math.atan(tan);
- 		 alpha+=Math.toRadians(90);
+		float tan=Math.abs(this.getX()-mScene.player.playerX)/(mScene.player.playerY-this.getY());
+ 		float alpha=(float)Math.atan(tan);
+ 		alpha+=Math.toRadians(90);
+ 		 
+ 		int xSign=1;
+		int ySign=1;
+		
+		if(this.getX()<mScene.player.playerX)
+			xSign=-1;
+		
+		if(this.getY()>mScene.player.playerY)
+			ySign=-1;
  		 
  		 LinkedList<Bulet> temp=new LinkedList<Bulet>();
  		 
@@ -193,8 +211,8 @@ public class EyeEnemy extends Enemy{
  	 	 temp.getLast().init(this.getX()+this.getWidth()/2,this.getY()+100+this.getHeight()/2,100);
   
  	 	 
- 	 	 float distX=(float)(this.getX()+this.getWidth()/2+10*Math.cos(alpha));
- 	 	 float distY=(float)(this.getY()+this.getHeight()/2+100+10*Math.sin(alpha));
+ 	 	 float distX=(float)(this.getX()+this.getWidth()/2+xSign*10*Math.cos(alpha));
+ 	 	 float distY=(float)(this.getY()+this.getHeight()/2+ySign*100+10*Math.sin(alpha));
  	 	 temp.getLast().lastInit(distX,distY,110);
  
  	 	 this.mScene.gameSceneCreator.createBulet(temp, this);

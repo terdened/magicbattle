@@ -310,7 +310,44 @@ public class ResourcesManager
     
     public void unloadGameTextures()
     {
-        
+    	player_region = null;
+    	edge_region= null;
+    	player_bulet_region= null;
+    	wall_region= null;
+    	playerBuletTail= null;
+	    river_region=null;
+		eye_region=null;
+	    enemy_bulet_region=null; 
+		enemy_buf_region=null;
+		enemy_debuf_region=null;
+		enemy_wall_region=null;
+		enemyBuletTail=null;
+		enemyElementMagic=null;
+		bat_region=null;	
+	    gamebkg_region=null;
+	    stone_region=null;
+	    whole_region=null; 
+	    dark_shadow=null;
+	    light_shadow=null;
+	    speedDownBuf=null;
+	    speedUpBuf=null;
+	    healthDownBuf=null;
+	    healthUpBuf=null;
+	    manaLine=null;
+	    healthLine=null;
+	    healthPlusIcon=null;
+		healthMinusIcon=null;
+		speedPlusIcon=null;
+		speedMinusIcon=null;
+	    bulet_icon=null;
+		wall_icon=null;
+		nature_icon=null;
+		buf_icon=null;
+		debuf_icon=null;
+		
+		if(mGameTextureAtlas!=null)
+			mGameTextureAtlas.unload();
+		
     }
     
     public void unloadMenuTextures()
@@ -375,6 +412,7 @@ public class ResourcesManager
     	try 
     	{
     	    this.playerMenuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	   
     	    
     	} 
     	catch (final TextureAtlasBuilderException e)
@@ -385,7 +423,19 @@ public class ResourcesManager
     
     public void unloadPlayerMenuTextures()
     {
-        
+    	fireElementButton = null;
+    	waterElementButton = null;
+    	earthElementButton = null;
+    	windElementButton = null;
+    	backButton = null;
+    	limb_region = null;
+    	sokrat_region = null;
+    	veider_region = null;
+    	haron_region = null;
+    	dorian_region = null;
+    	
+    	if(playerMenuTextureAtlas!=null)
+    		this.playerMenuTextureAtlas.unload();
     }
         
     public void loadPlayerMenuTextures()

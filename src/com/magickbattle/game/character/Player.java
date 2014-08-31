@@ -75,7 +75,6 @@ public abstract class Player extends AnimatedSprite
     {
     	super(pX, pY, player_region, vbo);	
         createPhysics(camera, physicsWorld);
-        camera.setChaseEntity(this);
         destinationX=-100;
         destinationY=-100;
         health=100;
@@ -138,7 +137,9 @@ public abstract class Player extends AnimatedSprite
 	            super.onUpdate(pSecondsElapsed);
 	            camera.onUpdate(0.1f);                   
 	        }
-	    });   
+	    });
+
+        camera.setChaseEntity(this);
 	}
 	
 	/*
@@ -401,14 +402,7 @@ public abstract class Player extends AnimatedSprite
 			 }else
 			 if(effects.get(i).getType().equals("health"))
 			 {
-				 health+=effects.get(i).getPower();
-				 if(health>maxHealth)
-				 {
-					 health=maxHealth;
-				 }
-				 if(health<=0)
-					 isDead=true;
-					 
+				 this.attacked(-effects.get(i).getPower());
 			 }
 		 }
 		 }
@@ -421,8 +415,11 @@ public abstract class Player extends AnimatedSprite
 	 public void attacked(float damage)
 	 {
 		 health-=damage;
-		 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,"-"+String.valueOf(damage));
-		 tempText.add(temp);
+		 if(Math.abs(damage)>5)
+		 {
+			 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,String.valueOf(-damage));
+			 tempText.add(temp);
+		 }
 		 
 		 
 		 if(health<=0)

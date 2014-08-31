@@ -13,9 +13,11 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.magickbattle.engine.ResourcesManager;
 import com.magickbattle.game.GameScene;
 import com.magickbattle.game.ai.BatAI;
+import com.magickbattle.game.level.LevelObject;
 import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.PlayerMagic;
@@ -148,8 +150,11 @@ public class BatEnemy extends Enemy{
 	@Override
 	protected void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
 	{        
-		body = PhysicsFactory.createCircleBody(physicsWorld, this, BodyType.KinematicBody, 
-	    		PhysicsFactory.createFixtureDef(0, 0, 0));
+		
+		FixtureDef fixDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+		fixDef.filter.maskBits=0x0002;
+		body = PhysicsFactory.createCircleBody(physicsWorld, this, BodyType.DynamicBody, fixDef);
+		
 	    this.effects = new LinkedList<Effect>();
 	    body.setUserData("player");
 	    body.setFixedRotation(true);  
