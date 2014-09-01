@@ -6,7 +6,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -17,8 +16,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.magickbattle.engine.ResourcesManager;
 import com.magickbattle.game.GameScene;
 import com.magickbattle.game.ai.BatAI;
-import com.magickbattle.game.level.LevelObject;
-import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.PlayerMagic;
 
@@ -28,7 +25,7 @@ public class BatEnemy extends Enemy{
 	public BatEnemy(GameScene scene, float pX, float pY,
 			VertexBufferObjectManager vbo, Camera camera,
 			PhysicsWorld physicsWorld, ResourcesManager pResourcesManager) {
-		super(scene, pX, pY, vbo, camera, physicsWorld, pResourcesManager.bat_region);
+		super(scene, pX, pY, vbo, camera, physicsWorld, pResourcesManager.bat_region.mPlayerRegion);
 
 		playerMagic = new PlayerMagic();
 		
@@ -57,7 +54,7 @@ public class BatEnemy extends Enemy{
 	    manaPower=100;
 	    manaSpeed=0.1f;
 	    
-	    setName("eye");
+	    setName("bat");
 	    
 	    setElement("water");
         createShadow(mScene.vbom, mScene.resourcesManager.dark_shadow);

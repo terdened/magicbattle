@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -23,7 +22,7 @@ public class EyeEnemy extends Enemy{
 	public EyeEnemy(GameScene scene, float pX, float pY,
 			VertexBufferObjectManager vbo, Camera camera,
 			PhysicsWorld physicsWorld, ResourcesManager pResourcesManager) {
-		super(scene, pX, pY, vbo, camera, physicsWorld, pResourcesManager.eye_region);
+		super(scene, pX, pY, vbo, camera, physicsWorld, pResourcesManager.eye_region.mPlayerRegion);
 
 		playerMagic = new PlayerMagic();
 		
@@ -142,10 +141,6 @@ public class EyeEnemy extends Enemy{
 		
 	}
 	
-	
-	
-	
-	
 	public void goWhileWaiting()
 	{
 		float newX = this.playerX+(float)Math.random()*200-100;
@@ -206,7 +201,7 @@ public class EyeEnemy extends Enemy{
  		 LinkedList<Bulet> temp=new LinkedList<Bulet>();
  		 
  
- 		 temp.add(new Bulet(mScene.resourcesManager.player_bulet_region,getDamage(),
+ 		 temp.add(new Bulet(mScene.resourcesManager.eye_region.mBuletRegion,getDamage(),
  				 playerMagic.element, mScene));
  	 	 temp.getLast().init(this.getX()+this.getWidth()/2,this.getY()+100+this.getHeight()/2,100);
   

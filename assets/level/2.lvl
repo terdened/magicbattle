@@ -112,7 +112,7 @@
 	<entity x="1" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
 	<entity x="4" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
 	<entity x="7" y="1" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
-	<entity x="1" y="16" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
-	<entity x="5" y="10" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
-	<entity x="6" y="12" rotation="0" type="enemy" element="wind" value="enemy" name="bat"/>
+	<entity x="1" y="16" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
+	<entity x="5" y="10" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
+	<entity x="6" y="12" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
 </level>

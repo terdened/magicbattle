@@ -8,7 +8,6 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.input.touch.TouchEvent;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.magickbattle.game.gui.TextInformHolder;
@@ -58,9 +57,9 @@ public class GameSceneEventsController {
 		        		float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.wallCost);
 		        		if(manaK>0.3)
 		        		{
-		        			sceneHolder.wall.add(new Wall(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), sceneHolder.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.wall_region, sceneHolder.vbom, sceneHolder.playerMagic.element));             
+		        			sceneHolder.wall.add(new Wall(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), sceneHolder.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.player_region.mWallRegion, sceneHolder.vbom, sceneHolder.playerMagic.element));             
 			        		
-		        			if((sceneHolder.playerMagic.element=="water")||(sceneHolder.playerMagic.element=="earth"))
+		        			if((sceneHolder.player.playerMagic.element.equals("water"))||(sceneHolder.player.playerMagic.element.equals("earth")))
 		        			{
 		        				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
 				        		
@@ -112,7 +111,7 @@ public class GameSceneEventsController {
         		float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.buletCost);
         		if(manaK>0.3)
         		{
-        			sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_bulet_region,sceneHolder.player.getDamage(),sceneHolder.playerMagic.element, sceneHolder));
+        			sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_region.mBuletRegion,sceneHolder.player.getDamage(),sceneHolder.playerMagic.element, sceneHolder));
         			sceneHolder.bulet.getLast().init(sceneHolder.lastX,sceneHolder.lastY,sceneHolder.lastTapTime);
         			sceneHolder.bulet.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime()+10);
         			sceneHolder.attachChild(sceneHolder.bulet.getLast());
@@ -128,17 +127,6 @@ public class GameSceneEventsController {
             	float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.elementCost*tapLen);
             	if(manaK>0.3)
             	{
-            		if(sceneHolder.playerMagic.element.equals("fire"))
-            			sceneHolder.weather.setApocalipsys((int)(sceneHolder.playerMagic.elementPower*manaK), sceneHolder.vbom, sceneHolder);
-            		if(sceneHolder.playerMagic.element.equals("water"))
-            			sceneHolder.weather.setRain((int)(sceneHolder.playerMagic.elementPower*manaK));
-            		if(sceneHolder.playerMagic.element.equals("wind"))
-            		{
-            			Vector2 tempVector=new Vector2((sceneHolder.startX-pSceneTouchEvent.getX())/10,(sceneHolder.startY-pSceneTouchEvent.getY())/10);
-            			sceneHolder.weather.setWind(tempVector, (int)(sceneHolder.playerMagic.elementPower*manaK));
-            		}
-            		if(sceneHolder.playerMagic.element.equals("earth"))
-            			sceneHolder.weather.setApocalipsys(manaK*tapLen, sceneHolder.vbom, sceneHolder);
             		
             	}
             }
@@ -149,7 +137,7 @@ public class GameSceneEventsController {
 	       		if(manaK>0.3)
 	       		{
 	       			float tempTime=sceneHolder.playerMagic.bufTime*manaK;
-	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_buf_region,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
+	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_region.mBufRegion,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
 	       			sceneHolder.buf.getLast().init(sceneHolder.startX,sceneHolder.startY,sceneHolder.startTapTime);
 	       			sceneHolder.buf.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime());
 	       			sceneHolder.attachChild(sceneHolder.buf.getLast());
@@ -162,7 +150,7 @@ public class GameSceneEventsController {
 	       		if(manaK>0.3)
 	       		{
 	       			float tempTime=sceneHolder.playerMagic.debufTime*manaK;
-	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_buf_region,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
+	       			sceneHolder.buf.add(new Buf(sceneHolder.resourcesManager.player_region.mBufRegion,sceneHolder,sceneHolder.playerMagic.bufPower*manaK, (long)tempTime, sceneHolder.playerMagic.bufType));
 	       			sceneHolder.buf.getLast().init(sceneHolder.startX,sceneHolder.startY,sceneHolder.startTapTime);
 	       			sceneHolder.buf.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime());
 	       			sceneHolder.attachChild(sceneHolder.buf.getLast());

@@ -43,7 +43,7 @@ public class ScrollableMenu {
 	 */
 	public void addCircle(ResourcesManager resourcesManager, VertexBufferObjectManager vbom)
 	{
-		mCirclesList.add(new HellCircle(resourcesManager.limb_region,vbom));
+		mCirclesList.add(new HellCircle(resourcesManager.playermenu_background_region,vbom));
 		mCirclesList.getLast().getScene().setY((mCirclesList.size()-1)*1280);
 	}
 	

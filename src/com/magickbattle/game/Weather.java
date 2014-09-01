@@ -187,11 +187,8 @@ public class Weather {
 	public void setTail(String element, float x, float y)
 	{				
 		if(element.equals(mScene.playerMagic.element))
-			objects.add(new EnviromentObject(x, y, false, mScene.resourcesManager.playerBuletTail , 10,scene, 
+			objects.add(new EnviromentObject(x, y, false, mScene.resourcesManager.player_region.mTailRegion , 10,scene, 
 					 mScene,new long[] { 20, 20, 20, 20, 20, 20, 20, 20 },"tail"));
-		else
-			objects.add(new EnviromentObject(x, y, false, mScene.resourcesManager.enemyBuletTail , 10, scene,
-					 mScene,new long[] { 5, 5, 5, 5, 5, 5, 5, 5 },"tail"));
 		
 		objects.getLast().setCenter(15, 15);
 	}
@@ -204,7 +201,7 @@ public class Weather {
 	 */
 	public void setFingerMagic(float x, float y)
 	{					
-		objects.add(new EnviromentObject(x, y, false, mScene.resourcesManager.playerBuletTail 
+		objects.add(new EnviromentObject(x, y, false, mScene.resourcesManager.player_region.mTailRegion 
 				, 30, scene, mScene,new long[] { 20, 20, 20, 20, 20, 20, 20, 20 },"tail"));
 		objects.getLast().setCenter(objects.getLast().getWidth()/2, objects.getLast().getHeight()/2);
 	}
@@ -216,7 +213,7 @@ public class Weather {
 	 */
 	public void setShadow(float x, float y)
 	{
-		objects.add(new EnviromentObject(x, y, false, resourcesManager.playerBuletTail , 10, scene, mScene,
+		objects.add(new EnviromentObject(x, y, false, resourcesManager.player_region.mTailRegion , 10, scene, mScene,
 				new long[] { 5, 5, 5, 5, 5, 5, 5, 5 },"shadow"));
 	}
 	
@@ -229,39 +226,6 @@ public class Weather {
 	{
 		snow=true;
 		snowTimer=time;
-	}
-	
-	/*
-	 * Activate apocalipsys mode(Fire spell) 
-	 * @param time is a apocalipsys mode
-	 */
-	//TODO: Add local gamescene
-	public void setApocalipsys(float time, VertexBufferObjectManager vbom, final GameScene scene)
-	{
-		apocalipsys=true;
-		
-		for(int i=0;i<20;i++)
-		{
-			walls.add(new Wall((float)Math.random()*800, (float)Math.random()*1280, time, resourcesManager.wall_region, vbom, "fire"));
-			scene.attachChild(walls.getLast());
-		}
-		
-	}
-	
-	/*
-	 * Create stormtroopers (Darth Vaider spell)
-	 * @param time is a apocalipsys mode
-	 */
-	public void setStormtrooper(LinkedList<EnviromentObject> objectList)
-	{
-		for(int i=0;i<objectList.size();i++)
-		{
-			objects.add(new EnviromentObject(objectList.get(i).getX(), objectList.get(i).getY(), false,
-					resourcesManager.enemyElementMagic , objectList.get(i).getLifeTime(), mScene,
-					new long[] { 5, 5, 5, 5, 5, 5, 5, 5 },"stormtrooper"));
-			objects.getLast().setRotation(objectList.get(i).getRotation());
-		}
-		
 	}
 	
 

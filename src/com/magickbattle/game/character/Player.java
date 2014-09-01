@@ -69,11 +69,13 @@ public abstract class Player extends AnimatedSprite
 	public float damage=35; 
 	public LinkedList<Effect> effects;
 	public LinkedList<TextInformHolder> tempText=new LinkedList<TextInformHolder>();
+	protected Boolean mIsAttacked;
 	 
     public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld,  
     		ITiledTextureRegion player_region)
     {
     	super(pX, pY, player_region, vbo);	
+    	mIsAttacked=false;
         createPhysics(camera, physicsWorld);
         destinationX=-100;
         destinationY=-100;
@@ -435,6 +437,8 @@ public abstract class Player extends AnimatedSprite
 		 
 		 if(health>maxHealth)
 			 health=maxHealth;
+		 
+		 mIsAttacked=true;
 		 
 	 }
 	 

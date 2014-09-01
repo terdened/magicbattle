@@ -69,7 +69,7 @@ public class GameSceneLoader {
 	            
 	            Level level = new Level(width, height, sceneHolder);
 	            Sprite background = new Sprite(0,0,
-	            		sceneHolder.resourcesManager.gamebkg_region,sceneHolder.vbom);
+	            		sceneHolder.resourcesManager.gamebkg_region[0],sceneHolder.vbom);
 	            level.attachBackground(background);
 	            sceneHolder.attachLevelHolder(level);
 
@@ -140,7 +140,7 @@ public class GameSceneLoader {
 	            
 	            if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER))
 	            {
-	            	ITiledTextureRegion player_region=sceneHolder.resourcesManager.player_region;
+	            	ITiledTextureRegion player_region=sceneHolder.resourcesManager.player_region.mPlayerRegion;
 
 	            	sceneHolder.player = new Player(x*80, y*80, sceneHolder.vbom, sceneHolder.camera, sceneHolder.physicsWorld, player_region)
 	                {
@@ -277,6 +277,10 @@ public class GameSceneLoader {
 		            else
 	            	if(name.equals("bat"))
 		                enemy = new BatEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
+		            else
+	            	if(name.equals("worm"))
+		                enemy = new WormEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
 		            else
 		            	enemy = new EyeEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 

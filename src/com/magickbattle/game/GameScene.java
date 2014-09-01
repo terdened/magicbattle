@@ -151,7 +151,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
         buletCount=0;
 
         weather = new Weather(false, 0, false, 0, false, 0 , new Vector2(0,0), 
-        		resourcesManager.wall_region, resourcesManager,this);
+        		resourcesManager.player_region.mWallRegion, resourcesManager,this);
         this.attachChild(weather.scene);
         //weather.setRain(2000);
         bulet = new LinkedList<Bulet>();

@@ -8,6 +8,7 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
 import com.magickbattle.engine.BaseScene;
@@ -21,6 +22,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
 	
 	private MenuScene menuChildScene;
 	private MenuScene mainMenuChildScene;
+	private Sprite mBackground;
 	
 	private final int MENU_FIRE = 0;
 	private final int MENU_WATER = 1;
@@ -149,18 +151,24 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
 
     private void createBackground()
     {
+    	mBackground=new Sprite(0, 0, resourcesManager.menu_background_region, vbom);
+    	this.attachChild(mBackground);
+    	
     	scrollMenu=new ScrollableMenu();
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	
-    	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.sokrat_region, vbom, "1",this);
-    	scrollMenu.getCirclesList().getLast().addButton(0, 800, resourcesManager.haron_region, vbom, "2",this);
+    	scrollMenu.getCirclesList().getLast().addButton(100, 200, resourcesManager.level_point_region, vbom, "1",this);
+    	scrollMenu.getCirclesList().getLast().addButton(415, 300, resourcesManager.level_point_region, vbom, "2",this);
+    	scrollMenu.getCirclesList().getLast().addButton(440, 450, resourcesManager.level_point_region, vbom, "2",this);
+    	scrollMenu.getCirclesList().getLast().addButton(100, 520, resourcesManager.level_point_region, vbom, "2",this);
+    	
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	
-    	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.dorian_region, vbom, "dorian",this);
+    	scrollMenu.getCirclesList().getLast().addButton(100, 150, resourcesManager.level_point_region, vbom, "dorian",this);
     	
     	scrollMenu.addCircle(resourcesManager, vbom);    
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
@@ -176,7 +184,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
     	scrollMenu.addCircle(resourcesManager, vbom);    
     	attachChild(scrollMenu.getCirclesList().getLast().getScene());
-    	scrollMenu.getCirclesList().getLast().addButton(50, 150, resourcesManager.veider_region, vbom, "veider",this);
+    	scrollMenu.getCirclesList().getLast().addButton(50, 150, resourcesManager.level_point_region, vbom, "veider",this);
     }
     
     @Override

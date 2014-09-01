@@ -175,6 +175,8 @@ public abstract class Enemy extends Player
         		this.mAI.update();
         	}
         	
+        	mIsAttacked=false;
+        	
         	if(tempText.size()>0)
 			{
         		mScene.addTextList(tempText,getWidth());

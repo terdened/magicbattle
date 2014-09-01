@@ -41,7 +41,7 @@ public class GameSceneCreator {
 			float manaK=enemy.getMana(enemy.playerMagic.buletCost);
 			if(manaK>0.3)
 			{
-				sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_bulet_region,temp.damage,temp.element, sceneHolder));
+				sceneHolder.bulet.add(new Bulet(buletQueue.get(i).getTextureRegion(),temp.damage,temp.element, sceneHolder));
 				sceneHolder.bulet.getLast().init(temp.mStartX,temp.mStartY,100);
 				sceneHolder.bulet.getLast().startFly(temp.mFinalX,temp.mFinalY,110);
 				sceneHolder.attachChild(sceneHolder.bulet.getLast());
@@ -53,57 +53,6 @@ public class GameSceneCreator {
 		}
 	}
 	
-	public void createWall(LinkedList<Wall> wallQueue, Enemy enemy)
-	{
-		for(int i=0;i<wallQueue.size();i++)
-		{
-   		
-			float manaK=enemy.getMana(enemy.playerMagic.wallCost);
-			
-    		if(manaK>0.3)
-    		{   
-    		//Заменить на EnemyMagic
-    			sceneHolder.wall.add(new Wall(wallQueue.get(i).getX(), wallQueue.get(i).getY(), enemy.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.enemy_wall_region, sceneHolder.vbom, wallQueue.get(i).getElement()));             
-	        		
-        			if((sceneHolder.wall.getLast().getElement()=="water")||(sceneHolder.wall.getLast().getElement()=="earth"))
-        			{
-        				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-		        		
-		        		Body tempBody;
-		        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast(), BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
-		        		tempBody.setUserData("wall");
-		        		sceneHolder.wall.getLast().initBody(tempBody);
-		        		
-		        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast(), sceneHolder.wall.getLast().getWallBody(), true, false));
-        			}
-        			sceneHolder.wall.getLast().setRotation(wallQueue.get(i).getRotation()); 
-        			sceneHolder.attachChild(sceneHolder.wall.getLast());
-    		}
-        		
-    		
-		}
-	}
-	
-	public void createStormtrooper(LinkedList<EnviromentObject> objectQueue)
-	{
-		for(int i=0;i<objectQueue.size();i++)
-		{
-			sceneHolder.weather.setStormtrooper(objectQueue);			
-		}
-	}
-	
-	public void createRiver()
-    {
-    	/*river = new Sprite(300, 400, resourcesManager.river_region, vbom);
-    	river.setRotation(90);
-    	river.setScale(1.65f,1.8f);
-    	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-    	riverBody = PhysicsFactory.createBoxBody(physicsWorld, river, BodyType.StaticBody, FIXTURE_DEF);
-    	riverBody.setUserData("river");
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(river, riverBody, true, false));
-    	attachChild(river);
-    	*/
-    }
 	
     public void createControllers()
 	{

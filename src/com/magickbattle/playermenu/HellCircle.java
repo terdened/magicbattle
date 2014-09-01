@@ -37,8 +37,8 @@ public class HellCircle
 	{
 		mScene=new Entity();
 		mBackground=new Sprite(0,0,region,vbom);
-		mBackground.setScale(1.69f,1.6f);
-		mBackground.setPosition(155, 240);
+		mBackground.setScale(1.5f,1.6f);
+		mBackground.setPosition(115, 240);
 		mSelectedLevel="none";
 		mScene.attachChild(mBackground);
 		
