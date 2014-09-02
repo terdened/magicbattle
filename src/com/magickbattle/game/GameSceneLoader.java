@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.magickbattle.game.level.Level;
 import com.magickbattle.game.level.StoneLevelObject;
+import com.magickbattle.game.level.TreeLevelObject;
 import com.magickbattle.game.level.WholeLevelObject;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.MagicParser;
@@ -121,6 +122,14 @@ public class GameSceneLoader {
                 	sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(object, 
                 			objectBody, true, false));
 	            }
+            	else
+            	if(type.equals("tree"))
+	            {
+            		TreeLevelObject object = new TreeLevelObject(x, y, 
+	            			sceneHolder.resourcesManager.tree_region, sceneHolder.vbom);
+	            	
+	            	sceneHolder.mLevel.attachObjectOnTop(object);
+	            }
 
 	            return null;
 	        }
@@ -142,7 +151,7 @@ public class GameSceneLoader {
 	            {
 	            	ITiledTextureRegion player_region=sceneHolder.resourcesManager.player_region.mPlayerRegion;
 
-	            	sceneHolder.player = new Player(x*80, y*80, sceneHolder.vbom, sceneHolder.camera, sceneHolder.physicsWorld, player_region)
+	            	sceneHolder.player = new Player(x*80, y*80, sceneHolder.vbom, sceneHolder.camera, sceneHolder.physicsWorld, player_region, sceneHolder)
 	                {
 	                    @Override
 	                    public void onDie()

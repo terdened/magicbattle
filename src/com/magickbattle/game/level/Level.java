@@ -34,7 +34,7 @@ public class Level extends Entity{
 
 		this.attachChild(mBackLayer);
 		this.attachChild(mMiddleLayer);
-		this.attachChild(mFrontLayer);
+		mGameScene.mTopLayer.attachChild(mFrontLayer);
 		
 		InitCamera();
 	}
@@ -63,6 +63,12 @@ public class Level extends Entity{
 		mMiddleLayer.attachChild(pObject);
 	}
 	
+	public void attachObjectOnTop(LevelObject pObject)
+	{
+		mObjectsList.add(pObject);
+		mFrontLayer.attachChild(pObject);
+	}
+	
 	public float getWidth()
 	{
 		return mWidth*80;
@@ -71,6 +77,17 @@ public class Level extends Entity{
 	public float getHeight()
 	{
 		return mHeight*80;
+	}
+	
+	public LinkedList<LevelObject> getObjectsByType(String pType)
+	{
+		LinkedList<LevelObject> result = new LinkedList<LevelObject>();
+		
+		for(int i=0; i<mObjectsList.size();i++)
+			if(mObjectsList.get(i).mType.equals(pType))
+				result.add(mObjectsList.get(i));
+		
+		return result;
 	}
 
 }

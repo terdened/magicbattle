@@ -15,9 +15,11 @@
  */
 package com.magickbattle.game.magick;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.magickbattle.game.GameScene;
 
 /*
  * Unit of wall spell
@@ -28,10 +30,13 @@ public class Wall extends AnimatedSprite{
 	private Body mWallBody;
 	private Boolean mIsBodyInit;
 	private String mElement;
+	private final GameScene mScene;
 	
-	public Wall(float x, float y, float health, ITiledTextureRegion wall_region, VertexBufferObjectManager vbom,String element)
+	public Wall(float x, float y, float health, ITiledTextureRegion wall_region,
+			VertexBufferObjectManager vbom,String element, final GameScene pScene)
 	{
 		super(x, y, wall_region, vbom);
+		mScene=pScene;
 		mX=x;
 		mY=y;
 		mHealth=health;
@@ -132,4 +137,18 @@ public class Wall extends AnimatedSprite{
 		this.mElement = mElement;
 	}
 	
+	@Override
+    protected void onManagedUpdate(float pSecondsElapsed) 
+	{
+		super.onManagedUpdate(pSecondsElapsed);
+		
+		if(isDestroy())
+		{
+			mScene.mWallToRemove.add(this);
+		}
+		else
+		{
+			updateWall();
+		}
+	}
 }

@@ -72,6 +72,7 @@ public class ResourcesManager
 	public ITextureRegion river_region;
 	public ITiledTextureRegion stone_region;
 	public ITiledTextureRegion whole_region;
+	public ITiledTextureRegion tree_region;
 	public ITextureRegion edge_region;
 	public ITiledTextureRegion bulet_icon;
 	public ITiledTextureRegion wall_icon;
@@ -242,9 +243,35 @@ public class ResourcesManager
 	    	worm_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
 		
 	   }
+	    else
+	    if(level.equals("3"))
+	    {
+	    	gamebkg_region = new ITextureRegion[1];
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/2Background.png");
+		    
+		    bat_region = new PlayerRegion();
+	    	bat_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);
+	    	bat_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	bat_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	bat_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	    	eye_region = new PlayerRegion();
+	    	eye_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
+	    	eye_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	eye_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	eye_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	    	worm_region = new PlayerRegion();	    	
+	    	worm_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Worm.png", 6, 3);	
+	    	worm_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	worm_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	worm_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	   }
 	    
 	    stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
 	    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/whole.png", 4, 3); 
+	    tree_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/tree.png", 1, 1); 
 	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
 	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
 	    

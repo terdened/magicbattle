@@ -30,6 +30,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.magickbattle.game.GameScene;
 import com.magickbattle.game.gui.TextInformHolder;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.PlayerMagic;
@@ -70,11 +71,13 @@ public abstract class Player extends AnimatedSprite
 	public LinkedList<Effect> effects;
 	public LinkedList<TextInformHolder> tempText=new LinkedList<TextInformHolder>();
 	protected Boolean mIsAttacked;
+	protected GameScene mScene;
 	 
-    public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld,  
-    		ITiledTextureRegion player_region)
+    public Player(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, 
+    		PhysicsWorld physicsWorld, ITiledTextureRegion player_region, final GameScene pScene)
     {
     	super(pX, pY, player_region, vbo);	
+    	mScene=pScene;
     	mIsAttacked=false;
         createPhysics(camera, physicsWorld);
         destinationX=-100;
@@ -476,4 +479,23 @@ public abstract class Player extends AnimatedSprite
 			 return false;
 	 }
 	 
+	 @Override
+     protected void onManagedUpdate(float pSecondsElapsed) 
+     {
+         super.onManagedUpdate(pSecondsElapsed);
+        
+         if(!getIsDead())
+		 {		        	 
+			 fillMana();
+			 move();
+			 updateEffects(mScene.gameHUD);
+			 
+			
+			 if(tempText.size()>0)
+			 {
+				 mScene.addTextList(tempText,getWidth());
+				 tempText=new LinkedList<TextInformHolder>();
+			 }
+		 }
+     }
 }

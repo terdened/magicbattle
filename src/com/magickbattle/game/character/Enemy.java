@@ -43,17 +43,13 @@ public abstract class Enemy extends Player
 {
 	 private String mElement;
 	 private String mName;
-	 protected GameScene mScene;
 	 protected BasicAI mAI;
 	 protected int mWaitTime;
 	 
 	 public Enemy(final GameScene scene,float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld,  ITiledTextureRegion player_region)
 	 {		 
-	    	super(pX, pY, vbo, camera, physicsWorld, player_region);
-
+	    	super(pX, pY, vbo, camera, physicsWorld, player_region, scene);
 			mWaitTime=0;
-	    	this.mScene=scene;
-	    	
 	 }
 	
 	 /*
@@ -165,23 +161,13 @@ public abstract class Enemy extends Player
         }
         else
         {
-        	
-        	fillMana();
-        	move();
-        	updateEffects(mScene.gameHUD);
-        	
-        	if(!isEnemyBusy())
+            if(!isEnemyBusy())
         	{
         		this.mAI.update();
         	}
-        	
+
         	mIsAttacked=false;
-        	
-        	if(tempText.size()>0)
-			{
-        		mScene.addTextList(tempText,getWidth());
-				tempText=new LinkedList<TextInformHolder>();
-			}
         }
+    	
     }
 }

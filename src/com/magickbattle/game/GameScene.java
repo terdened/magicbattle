@@ -78,7 +78,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public String levelName;
 	public Level mLevel;
 	public Entity mBackground;
-	public LinkedList<Enemy> mEnemiesToRemove;
+	public LinkedList<Player> mEnemiesToRemove;
+	public LinkedList<Wall> mWallToRemove;
+	public LinkedList<Bulet> mBuletToRemove;
+	public Entity mTopLayer;
+	public Entity mMagicLayer;
 	//End variables
 	
 	public void addTextList(LinkedList<TextInformHolder> tempList,float width)
@@ -98,7 +102,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public GameScene(String element, String level)
 	{
 		mEnemyList = new LinkedList<Enemy>();
-		mEnemiesToRemove = new LinkedList<Enemy>();
+		mEnemiesToRemove = new LinkedList<Player>();
+		mWallToRemove = new LinkedList<Wall>();
+		mBuletToRemove = new LinkedList<Bulet>();
+		
 		levelName=level;
 		try
 	    {
@@ -126,6 +133,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		player.playerMagic=playerMagic;
 		//player.oppositeMagic=enemyMagic;
 		
+		this.attachChild(mMagicLayer);
+		this.attachChild(mTopLayer);
 		
 	}
 	
@@ -138,7 +147,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     @Override
     public void createScene()
     {
-
+    	mMagicLayer = new Entity();
+		mTopLayer = new Entity();
 		mBackground = new Entity();
 		this.attachChild(mBackground);
     	gameSceneCreator=new GameSceneCreator(this);
@@ -200,7 +210,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	mEnemyList.add(pEnemy);
     }
     
-    public void detachEnemy(Enemy pEnemy)
+    public void detachEnemy(Player pEnemy)
     {
     	mEnemyList.remove(pEnemy);
     	
@@ -209,6 +219,26 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	
     	this.unregisterTouchArea(pEnemy);
     	this.detachChild(pEnemy);
+    }
+    
+    public void detachWall(Wall pWall)
+    {
+    	if(pWall.getIsBodyInit())
+		{
+			PhysicsConnector tempConnector= physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(pWall);
+			physicsWorld.unregisterPhysicsConnector(tempConnector);
+			physicsWorld.destroyBody(pWall.getWallBody());
+		}
+		
+		mMagicLayer.detachChild(pWall);
+		wall.remove(pWall);
+    }
+    
+    public void detachBulet(Bulet pBulet)
+    {
+    	mMagicLayer.detachChild(pBulet);
+		bulet.remove(pBulet);
+		buletCount--;
     }
     
 }

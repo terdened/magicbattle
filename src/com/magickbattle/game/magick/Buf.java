@@ -44,6 +44,29 @@ public class Buf extends Bulet
     protected void onManagedUpdate(float pSecondsElapsed) 
     {
         super.onManagedUpdate(pSecondsElapsed);
+        
+        if(mIsRemove)
+		{
+			mScene.mMagicLayer.detachChild(this);
+			mScene.buf.remove(this);
+			mScene.bufCount--;
+		}else
+		{
+    		if((this.getX()<-20)||(this.getX()>820))
+    		{
+    			mScene.mMagicLayer.detachChild(this);
+    			mScene.buf.remove(this);
+    			mScene.bufCount--;
+    		}
+    		else
+    		if((getY()<-20)||(getY()>mScene.mLevel.getHeight()))
+    		{
+    			mScene.mMagicLayer.detachChild(this);
+    			mScene.buf.remove(this);
+    			mScene.bufCount--;
+    		}
+		}
+        
         int l=mScene.wall.size();
         for(int i=0; i<l;i++)
         {                

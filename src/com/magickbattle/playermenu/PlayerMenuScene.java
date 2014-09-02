@@ -161,7 +161,7 @@ public class PlayerMenuScene extends BaseScene implements IOnMenuItemClickListen
     	
     	scrollMenu.getCirclesList().getLast().addButton(100, 200, resourcesManager.level_point_region, vbom, "1",this);
     	scrollMenu.getCirclesList().getLast().addButton(415, 300, resourcesManager.level_point_region, vbom, "2",this);
-    	scrollMenu.getCirclesList().getLast().addButton(440, 450, resourcesManager.level_point_region, vbom, "2",this);
+    	scrollMenu.getCirclesList().getLast().addButton(440, 450, resourcesManager.level_point_region, vbom, "3",this);
     	scrollMenu.getCirclesList().getLast().addButton(100, 520, resourcesManager.level_point_region, vbom, "2",this);
     	
     	

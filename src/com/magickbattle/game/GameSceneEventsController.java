@@ -1,7 +1,5 @@
 package com.magickbattle.game;
 
-import java.util.LinkedList;
-
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -10,7 +8,6 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.magickbattle.game.gui.TextInformHolder;
 import com.magickbattle.game.magick.Buf;
 import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.Wall;
@@ -31,6 +28,22 @@ public class GameSceneEventsController {
 		sceneHolder.mEnemiesToRemove.clear();
 	}
 	
+	public void removeWalls()
+	{
+		for(int i=0; i<sceneHolder.mWallToRemove.size();i++)
+			sceneHolder.detachWall(sceneHolder.mWallToRemove.get(i));
+		
+		sceneHolder.mWallToRemove.clear();
+	}
+	
+	public void removeBulets()
+	{
+		for(int i=0; i<sceneHolder.mBuletToRemove.size();i++)
+			sceneHolder.detachBulet(sceneHolder.mBuletToRemove.get(i));
+		
+		sceneHolder.mBuletToRemove.clear();
+	}
+	
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
     {
     	if(pSceneTouchEvent.isActionMove())
@@ -49,42 +62,41 @@ public class GameSceneEventsController {
     		}
     		else
         	{
-    			
-	        		if((Math.abs(sceneHolder.xLastWall-pSceneTouchEvent.getX())>50)||(Math.abs(sceneHolder.yLastWall-pSceneTouchEvent.getY())>50))
+        		if((Math.abs(sceneHolder.xLastWall-pSceneTouchEvent.getX())>50)||(Math.abs(sceneHolder.yLastWall-pSceneTouchEvent.getY())>50))
+        		{
+	        		float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.wallCost);
+	        		if(manaK>0.3)
 	        		{
+	        			sceneHolder.wall.add(new Wall(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(),
+	        					sceneHolder.playerMagic.wallHealth*manaK, 
+	        					sceneHolder.resourcesManager.player_region.mWallRegion, 
+	        					sceneHolder.vbom, sceneHolder.playerMagic.element, sceneHolder));             
 		        		
-		            	
-		        		float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.wallCost);
-		        		if(manaK>0.3)
-		        		{
-		        			sceneHolder.wall.add(new Wall(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), sceneHolder.playerMagic.wallHealth*manaK, sceneHolder.resourcesManager.player_region.mWallRegion, sceneHolder.vbom, sceneHolder.playerMagic.element));             
+	        			if((sceneHolder.player.playerMagic.element.equals("water"))||(sceneHolder.player.playerMagic.element.equals("earth")))
+	        			{
+	        				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
 			        		
-		        			if((sceneHolder.player.playerMagic.element.equals("water"))||(sceneHolder.player.playerMagic.element.equals("earth")))
-		        			{
-		        				sceneHolder.FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
-				        		
-				        		Body tempBody;
-				        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast(), BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
-				        		tempBody.setUserData("wall");
-				        		sceneHolder.wall.getLast().initBody(tempBody);
-				        		
-				        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast(), sceneHolder.wall.getLast().getWallBody(), true, false));
-		        			}
-		        			
-		        			if((sceneHolder.xLastWall-pSceneTouchEvent.getX())!=0)
-			       			 {
-			       				 
-			       				 if(pSceneTouchEvent.getX()-sceneHolder.xLastWall>0)	
-			       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
-			       				 else
-			       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
-			       			 }	
-			                
-		        			sceneHolder.attachChild(sceneHolder.wall.getLast());
-			        		sceneHolder.xLastWall=pSceneTouchEvent.getX();
-			        		sceneHolder.yLastWall=pSceneTouchEvent.getY();
-		        		}
-	        		
+			        		Body tempBody;
+			        		tempBody = PhysicsFactory.createBoxBody(sceneHolder.physicsWorld, sceneHolder.wall.getLast(), BodyType.StaticBody, sceneHolder.FIXTURE_DEF);
+			        		tempBody.setUserData("wall");
+			        		sceneHolder.wall.getLast().initBody(tempBody);
+			        		
+			        		sceneHolder.physicsWorld.registerPhysicsConnector(new PhysicsConnector(sceneHolder.wall.getLast(), sceneHolder.wall.getLast().getWallBody(), true, false));
+	        			}
+	        			
+	        			if((sceneHolder.xLastWall-pSceneTouchEvent.getX())!=0)
+		       			 {
+		       				 
+		       				 if(pSceneTouchEvent.getX()-sceneHolder.xLastWall>0)	
+		       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
+		       				 else
+		       					sceneHolder.wall.getLast().setRotation((float)(Math.atan((pSceneTouchEvent.getY()-sceneHolder.yLastWall)/(pSceneTouchEvent.getX()-sceneHolder.xLastWall))*180/3.14));
+		       			 }	
+		                
+	        			sceneHolder.mMagicLayer.attachChild(sceneHolder.wall.getLast());
+		        		sceneHolder.xLastWall=pSceneTouchEvent.getX();
+		        		sceneHolder.yLastWall=pSceneTouchEvent.getY();
+	        		}
         		}
         	}
     	}
@@ -114,7 +126,7 @@ public class GameSceneEventsController {
         			sceneHolder.bulet.add(new Bulet(sceneHolder.resourcesManager.player_region.mBuletRegion,sceneHolder.player.getDamage(),sceneHolder.playerMagic.element, sceneHolder));
         			sceneHolder.bulet.getLast().init(sceneHolder.lastX,sceneHolder.lastY,sceneHolder.lastTapTime);
         			sceneHolder.bulet.getLast().startFly(pSceneTouchEvent.getX(),pSceneTouchEvent.getY(),pSceneTouchEvent.getMotionEvent().getEventTime()+10);
-        			sceneHolder.attachChild(sceneHolder.bulet.getLast());
+        			sceneHolder.mMagicLayer.attachChild(sceneHolder.bulet.getLast());
         			sceneHolder.bulet.getLast().createShadow(sceneHolder.vbom, sceneHolder.resourcesManager.light_shadow);
         			sceneHolder.buletCount++;
         		}
@@ -179,110 +191,17 @@ public class GameSceneEventsController {
             public void onUpdate(final float pSecondsElapsed) 
             {            	
             	removeBodies();
-            		for(int i=0;i<sceneHolder.textList.size();i++)
-            		{
-            			if(sceneHolder.textList.get(i).getRemain()<=0)
-            			{
-            				sceneHolder.detachChild(sceneHolder.textList.get(i));
-            				sceneHolder.textList.remove(i);
-            			}
-            		}
-            	
-            		for(int i=0;i<sceneHolder.weather.walls.size();i++)
-            		{
-            			if(sceneHolder.weather.walls.get(i).isDestroy())
-            				sceneHolder.detachChild(sceneHolder.weather.walls.get(i));
-            		}
-
-            		sceneHolder.weather.updateWeather(sceneHolder.vbom);
-            	   
-            		if(!sceneHolder.player.getIsDead())
-            		{
-            			if(sceneHolder.player.health<=0)
-            				sceneHolder.detachChild(sceneHolder.playerStatus);
-            			
-            			if(sceneHolder.player.tempText.size()>0)
-            			{
-            				sceneHolder.addTextList(sceneHolder.player.tempText,sceneHolder.player.getWidth());
-            				sceneHolder.player.tempText=new LinkedList<TextInformHolder>();
-            			}
-            			
-            			
-            			sceneHolder.player.fillMana();
-            			sceneHolder.player.move();
-            			sceneHolder.player.updateEffects(sceneHolder.gameHUD);
-            		
-	            	for(int i=0; i < sceneHolder.buletCount; i++)
-	            	{
-	            		if(sceneHolder.bulet.get(i).mIsRemove)
-	            		{
-	            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
-	            			sceneHolder.bulet.remove(i);
-	            			sceneHolder.buletCount--;
-	            		}else
-	            		{
-	            			//weather.setTail(bulet.get(i).element, bulet.get(i).getX(), bulet.get(i).getY(), vbom, playerMagic.element, enemyMagic.element);
-		            		if((sceneHolder.bulet.get(i).getX()<-20)||(sceneHolder.bulet.get(i).getX()>820))
-		            		{
-		            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
-		            			sceneHolder.bulet.remove(i);
-		            			sceneHolder.buletCount--;
-		            		}
-		            		else
-		            		if((sceneHolder.bulet.get(i).getY()<-20)||(sceneHolder.bulet.get(i).getY()>sceneHolder.mLevel.getHeight()))
-		            		{
-		            			sceneHolder.detachChild(sceneHolder.bulet.get(i));
-		            			sceneHolder.bulet.remove(i);
-		            			sceneHolder.buletCount--;
-		            		}
-	            		}
-	            	}
-	            	
-	            	for(int i=0; i < sceneHolder.bufCount; i++)
-	            	{
-	            		if(sceneHolder.buf.get(i).mIsRemove)
-	            		{
-	            			sceneHolder.detachChild(sceneHolder.buf.get(i));
-	            			sceneHolder.buf.remove(i);
-	            			sceneHolder.bufCount--;
-	            		}else
-	            		{
-		            		if((sceneHolder.buf.get(i).getX()<-20)||(sceneHolder.buf.get(i).getX()>820))
-		            		{
-		            			sceneHolder.detachChild(sceneHolder.buf.get(i));
-		            			sceneHolder.buf.remove(i);
-		            			sceneHolder.bufCount--;
-		            		}
-		            		else
-		            		if((sceneHolder.buf.get(i).getY()<-20)||(sceneHolder.buf.get(i).getY()>1300))
-		            		{
-		            			sceneHolder.detachChild(sceneHolder.buf.get(i));
-		            			sceneHolder.buf.remove(i);
-		            			sceneHolder.bufCount--;
-		            		}
-	            		}
-	            	}
-	            	
-            	
-	            	for(int i=0; i < sceneHolder.wall.size(); i++)
-	            	{
-	            		sceneHolder.wall.get(i).updateWall();
-	            		
-	            		if(sceneHolder.wall.get(i).isDestroy())
-	            		{
-	            			if(sceneHolder.wall.get(i).getIsBodyInit())
-	            			{
-	            				PhysicsConnector tempConnector= sceneHolder.physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(sceneHolder.wall.get(i));
-	            				sceneHolder.physicsWorld.unregisterPhysicsConnector(tempConnector);
-	            				sceneHolder.physicsWorld.destroyBody(sceneHolder.wall.get(i).getWallBody());
-	            			}
-	            			
-	            			sceneHolder.detachChild(sceneHolder.wall.get(i));
-	            			sceneHolder.wall.remove(i);
-	            		}
-	            	}
-            		}
-            	
+            	removeWalls();
+            	removeBulets();
+        		for(int i=0;i<sceneHolder.textList.size();i++)
+        		{
+        			if(sceneHolder.textList.get(i).getRemain()<=0)
+        			{
+        				sceneHolder.detachChild(sceneHolder.textList.get(i));
+        				sceneHolder.textList.remove(i);
+        			}
+        		}
+        		sceneHolder.weather.updateWeather(sceneHolder.vbom);
             }
         });
 		

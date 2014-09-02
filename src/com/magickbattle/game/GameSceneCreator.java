@@ -44,7 +44,7 @@ public class GameSceneCreator {
 				sceneHolder.bulet.add(new Bulet(buletQueue.get(i).getTextureRegion(),temp.damage,temp.element, sceneHolder));
 				sceneHolder.bulet.getLast().init(temp.mStartX,temp.mStartY,100);
 				sceneHolder.bulet.getLast().startFly(temp.mFinalX,temp.mFinalY,110);
-				sceneHolder.attachChild(sceneHolder.bulet.getLast());
+				sceneHolder.mMagicLayer.attachChild(sceneHolder.bulet.getLast());
 				sceneHolder.bulet.getLast().createShadow(sceneHolder.vbom, sceneHolder.resourcesManager.light_shadow);
 				sceneHolder.buletCount++;
 			}

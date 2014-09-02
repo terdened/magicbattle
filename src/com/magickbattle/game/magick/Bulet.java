@@ -15,6 +15,8 @@
  */
 
 package com.magickbattle.game.magick;
+import java.util.LinkedList;
+
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -23,6 +25,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.math.Vector2;
 import com.magickbattle.game.GameScene;
+import com.magickbattle.game.level.LevelObject;
 
 //TODO: extend AnimatedSprite
 /*
@@ -72,10 +75,31 @@ public class Bulet extends Sprite
 		mStartTime=time;
 	}
 	
+	public void removeControl()
+	{
+		if((this.getX()<-20)||(this.getX()>820))
+		{
+			remove();
+		}
+		else
+		if((this.getY()<-20)||(this.getY()>mScene.mLevel.getHeight()))
+		{
+			remove();
+		}
+	}
+	
+	public void remove()
+	{
+		mScene.mBuletToRemove.add(this);
+	}
+	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) 
     {
         super.onManagedUpdate(pSecondsElapsed);
+        
+        removeControl();
+        
         int l=mScene.wall.size();
         for(int i=0; i<l;i++)
         {                
@@ -90,7 +114,8 @@ public class Bulet extends Sprite
             		}else
             		{
             			mScene.wall.get(i).attack(damage);
-                		mIsRemove=true;
+            			remove();
+            			return;
             		}
             	}else
             	{
@@ -105,27 +130,38 @@ public class Bulet extends Sprite
         if (mScene.player.collidesWith(this))
         {
         	mScene.player.attacked(damage);
-        	mIsRemove=true;
+        	remove();
+			return;
         }
         
+        LinkedList<LevelObject> levelObsacles = mScene.mLevel.getObjectsByType("stone");
+        for(int i=0;i<levelObsacles.size();i++)
+        {
+        	if(levelObsacles.get(i).collidesWith(this))
+        	{	
+        		remove();
+    			return;
+        	}
+        }
         
         for(int i=0;i<mScene.mEnemyList.size();i++)
-        if (mScene.mEnemyList.get(i).collidesWith(this))
-        {
-        	mScene.mEnemyList.get(i).attacked(damage);
-        	mScene.mEnemyList.get(i).isAttackted=true;
-        	mIsRemove=true;
-        }
+	        if (mScene.mEnemyList.get(i).collidesWith(this))
+	        {
+	        	mScene.mEnemyList.get(i).attacked(damage);
+	        	mScene.mEnemyList.get(i).isAttackted=true;
+	        	remove();
+    			return;
+	        }
         
         Vector2 temp=new Vector2(mSpeedX,mSpeedY);
 		temp.add(mScene.weather.wind);
 		if(mIsInit)
 		{
-		mFinalX-=temp.x;
-		mFinalY-=temp.y;
-		
-		setX(mFinalX);
-		setY(mFinalY);
+			mFinalX-=temp.x;
+			mFinalY-=temp.y;
+			
+			setX(mFinalX);
+			setY(mFinalY);
 		}
     }
 	

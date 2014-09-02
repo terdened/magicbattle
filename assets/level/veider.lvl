@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<level width="800" height="1280">   
-    <entity x="400" y="960" rotation="0" type="player" value="player"/>
-    <entity x="400" y="320" rotation="180" type="enemy" element="wind" value="enemy" name="veider"/>
-    <entity x="300" y="400" rotation="90" type="object" value="river.png"/>
-</level>
