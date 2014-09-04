@@ -420,13 +420,7 @@ public abstract class Player extends AnimatedSprite
 	 public void attacked(float damage)
 	 {
 		 health-=damage;
-		 if(Math.abs(damage)>5)
-		 {
-			 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,String.valueOf(-damage));
-			 tempText.add(temp);
-		 }
-		 
-		 
+		
 		 if(health<=0)
 		 {
 			 body.setLinearVelocity(0,0);
@@ -440,6 +434,14 @@ public abstract class Player extends AnimatedSprite
 		 
 		 if(health>maxHealth)
 			 health=maxHealth;
+		 else
+		 {
+			 if(Math.abs(damage)>=5)
+			 {
+				 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,String.valueOf(-damage));
+				 tempText.add(temp);
+			 }
+		 }
 		 
 		 mIsAttacked=true;
 		 

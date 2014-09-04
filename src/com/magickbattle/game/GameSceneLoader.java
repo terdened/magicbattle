@@ -69,9 +69,14 @@ public class GameSceneLoader {
 	            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
 	            
 	            Level level = new Level(width, height, sceneHolder);
-	            Sprite background = new Sprite(0,0,
-	            		sceneHolder.resourcesManager.gamebkg_region[0],sceneHolder.vbom);
-	            level.attachBackground(background);
+	            Sprite backgrounds[] = new Sprite[sceneHolder.resourcesManager.gamebkg_region.length];
+	             
+	            for(int i=0;i<backgrounds.length;i++)
+	            {
+	            	backgrounds[i]= new Sprite(0,0, sceneHolder.resourcesManager.gamebkg_region[i],sceneHolder.vbom);
+	            }
+	            
+	            level.attachBackground(backgrounds);
 	            sceneHolder.attachLevelHolder(level);
 
 	            return sceneHolder;
@@ -290,6 +295,14 @@ public class GameSceneLoader {
 		            else
 	            	if(name.equals("worm"))
 		                enemy = new WormEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
+		            else
+	            	if(name.equals("spider"))
+		                enemy = new SpiderEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
+		            else
+	            	if(name.equals("plant"))
+		                enemy = new PlantEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
 		            else
 		            	enemy = new EyeEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 

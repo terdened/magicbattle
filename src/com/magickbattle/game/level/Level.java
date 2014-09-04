@@ -45,15 +45,21 @@ public class Level extends Entity{
 		mGameScene.camera.setBoundsEnabled(true);
 	}
 	
-	public void attachBackground(Sprite pBackground)
+	public void attachBackground(Sprite pBackgrounds[])
 	{
-		float width=mWidth*80;
-		float height=mHeight*80;
+		float width = mWidth*80;
+		float yRelocation = 0;
 		
-		pBackground.setSize(width,height);
-
-		
-		mBackLayer.attachChild(pBackground);
+		for(int i=0; i<pBackgrounds.length; i++)
+		{
+			float k =width/pBackgrounds[i].getWidth();
+			
+			pBackgrounds[i].setSize(pBackgrounds[i].getWidth()*k,pBackgrounds[i].getHeight()*k);
+			pBackgrounds[i].setPosition(0, yRelocation);
+			mBackLayer.attachChild(pBackgrounds[i]);
+			
+			yRelocation+=pBackgrounds[i].getHeight();
+		}
 	}
 
 	
