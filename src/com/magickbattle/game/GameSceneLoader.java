@@ -255,8 +255,10 @@ public class GameSceneLoader {
 	                        {
 	                        	if(sceneHolder.touchPlayer)
 	                        	{
+	                        		float kMana=this.getMana(this.playerMagic.bufCost);
+	                        		if(kMana>0.3)
 	                        		this.setBuf(this.playerMagic.bufPower, 
-	                        				this.playerMagic.bufTime, this.playerMagic.bufType);
+	                        				(int)(kMana*this.playerMagic.bufTime), this.playerMagic.bufType);
 	                        	}
 	                        	sceneHolder.freePlayer=true;
 	                        	sceneHolder.touchPlayer=false;
@@ -304,6 +306,10 @@ public class GameSceneLoader {
 	            	if(name.equals("plant"))
 		                enemy = new PlantEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
+            	 else
+ 	            	if(name.equals("human"))
+ 		                enemy = new HumanEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
+ 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );
 		            else
 		            	enemy = new EyeEnemy(sceneHolder,x*80, y*80, sceneHolder.vbom, 
 		                		sceneHolder.camera, sceneHolder.physicsWorld, sceneHolder.resourcesManager );

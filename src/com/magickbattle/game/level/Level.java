@@ -95,5 +95,36 @@ public class Level extends Entity{
 		
 		return result;
 	}
+	
+	public int[][] getLevelGrid()
+	{
+		int[][] result = new int[mHeight][];
+		
+		for(int i=0; i<result.length; i++)
+		{
+			result[i] = new int[mWidth];
+			
+			for(int j=0; j<result[i].length; j++)
+			{
+				result[i][j] = -1;
+			}
+		}
+		
+		LinkedList<LevelObject> stones = getObjectsByType("stone");
+		
+		for(int i=0; i<stones.size();i++)
+		{
+			result[stones.get(i).mY][stones.get(i).mX] = -2;
+		}
+		
+		LinkedList<LevelObject> wholes = getObjectsByType("whole");
+		
+		for(int i=0; i<wholes.size();i++)
+		{
+			result[wholes.get(i).mY][wholes.get(i).mX] = -2;
+		}
+		
+		return result;
+	}
 
 }

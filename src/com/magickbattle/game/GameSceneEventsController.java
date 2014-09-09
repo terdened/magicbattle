@@ -145,7 +145,7 @@ public class GameSceneEventsController {
            else
            if(((sceneHolder.touchPlayer)||(sceneHolder.player.touchPlayerShadow))&&(sceneHolder.freePlayer))
            {
-        	   	float manaK=sceneHolder.player.getMana(sceneHolder.playerMagic.bufCost);
+        	   	float manaK=sceneHolder.player.getMana(sceneHolder.player.playerMagic.bufCost);
 	       		if(manaK>0.3)
 	       		{
 	       			float tempTime=sceneHolder.playerMagic.bufTime*manaK;

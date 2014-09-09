@@ -84,11 +84,11 @@ public abstract class Player extends AnimatedSprite
         destinationY=-100;
         health=100;
         maxHealth=100;
-        manaPower=1000;
+        manaPower=100;
         speedX=0;
    	 	speedY=0;
-   	 	manaSpeed=0.5f;
-   	 	maxMana=1000;
+   	 	manaSpeed=0.2f;
+   	 	maxMana=100;
    	 	playerSpeed=5;
    	 	playerX=pX;
    	 	playerY=pY; 

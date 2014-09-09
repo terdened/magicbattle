@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.magickbattle.engine.ResourcesManager;
 import com.magickbattle.game.GameScene;
 import com.magickbattle.game.ai.WormAI;
+import com.magickbattle.game.ai.pathsearch.Path;
+import com.magickbattle.game.ai.pathsearch.WaveSearchAlgorithm;
 import com.magickbattle.game.magick.Effect;
 import com.magickbattle.game.magick.PlayerMagic;
 
@@ -160,6 +162,20 @@ public class WormEnemy extends Enemy{
 	
 	public void goToPlayer(float pDistance)
 	{
+		/*
+		WaveSearchAlgorithm wsa = new WaveSearchAlgorithm();
+		Vector2 startPosition = new Vector2(this.playerX, this.playerY);
+		Vector2 endPosition = new Vector2(mScene.player.playerX, mScene.player.playerY);
+		
+		Path path = wsa.findPath(mScene.mLevel, 
+				wsa.realPositionToTiles(startPosition),wsa.realPositionToTiles(endPosition));
+		
+		if(path.mPathNodes.size()>1)
+		{
+			Vector2 destination = wsa.tilePositionToReal(path.mPathNodes.get(1));
+			this.setDest(destination.x, destination.y);
+		}*/
+		
 		Vector2 distance = new Vector2();
 		
 		distance.x = getX()- mScene.player.getX();

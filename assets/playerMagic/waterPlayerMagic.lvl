@@ -1,7 +1,7 @@
 <magicConfig>
 	<element value="water" />
-	<magic value="buf" type="health" power="0.3" time="100" cost="30" />
-	<magic value="debuf" type="speed" power="-2" time="300" cost="30" />
+	<magic value="buf" type="health" power="0.3" time="100" cost="90" />
+	<magic value="debuf" type="speed" power="-2" time="300" cost="40" />
 	<magic value="bulet" power="20"  cost="30" />
 	<magic value="wall" power="70"  cost="10" />
 	<magic value="element" power="1"  cost="400" />
