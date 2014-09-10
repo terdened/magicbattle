@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="9" height="60">
+	<object x="0" y="10" rotation="0" type="whole" value="0"/>
+	<object x="1" y="10" rotation="0" type="whole" value="0"/>
+	<object x="2" y="10" rotation="0" type="whole" value="11"/>
+	<object x="3" y="10" rotation="0" type="whole" value="1"/>
+	<object x="0" y="11" rotation="0" type="whole" value="2"/>
+	<object x="1" y="11" rotation="0" type="whole" value="2"/>
+	<object x="2" y="11" rotation="0" type="whole" value="2"/>
+	<object x="3" y="11" rotation="0" type="whole" value="5"/>
+	<object x="2" y="9" rotation="0" type="whole" value="3"/>
+	<object x="3" y="9" rotation="0" type="whole" value="1"/>
+	<object x="2" y="8" rotation="0" type="whole" value="3"/>
+	<object x="3" y="8" rotation="0" type="whole" value="1"/>
+	<object x="2" y="7" rotation="0" type="whole" value="3"/>
+	<object x="3" y="7" rotation="0" type="whole" value="11"/>
+	<object x="4" y="7" rotation="0" type="whole" value="2"/>
+	<object x="5" y="7" rotation="0" type="whole" value="5"/>
+	<object x="2" y="6" rotation="0" type="whole" value="7"/>
+	<object x="3" y="6" rotation="0" type="whole" value="0"/>
+	<object x="4" y="6" rotation="0" type="whole" value="11"/>
+	<object x="5" y="6" rotation="0" type="whole" value="1"/>
+	<object x="4" y="5" rotation="0" type="whole" value="3"/>
+	<object x="5" y="5" rotation="0" type="whole" value="1"/>
+	<object x="4" y="4" rotation="0" type="whole" value="3"/>
+	<object x="5" y="4" rotation="0" type="whole" value="1"/>
+	<object x="4" y="3" rotation="0" type="whole" value="3"/>
+	<object x="5" y="3" rotation="0" type="whole" value="1"/>
+	<object x="3" y="2" rotation="0" type="whole" value="6"/>
+	<object x="4" y="2" rotation="0" type="whole" value="11"/>
+	<object x="5" y="2" rotation="0" type="whole" value="4"/>
+	<object x="3" y="1" rotation="0" type="whole" value="3"/>
+	<object x="4" y="1" rotation="0" type="whole" value="1"/>
+	<object x="3" y="0" rotation="0" type="whole" value="3"/>
+	<object x="4" y="0" rotation="0" type="whole" value="1"/>
+	
+	<entity x="3" y="58" rotation="0" type="player" value="player"/>
+	
+	<entity x="4" y="38" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
+	<entity x="4" y="28" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
+	<entity x="4" y="18" rotation="0" type="enemy" element="wind" value="enemy" name="worm"/>
+</level>

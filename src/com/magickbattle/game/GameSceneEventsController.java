@@ -104,6 +104,8 @@ public class GameSceneEventsController {
         {
         	sceneHolder.startX=pSceneTouchEvent.getX();
         	sceneHolder.startY=pSceneTouchEvent.getY();
+        	sceneHolder.cameraX=sceneHolder.camera.getCenterX();
+        	sceneHolder.cameraY=sceneHolder.camera.getCenterY();
         	sceneHolder.xLastWall=sceneHolder.startX;
         	sceneHolder.yLastWall=sceneHolder.startY;
         	sceneHolder.startTapTime=pSceneTouchEvent.getMotionEvent().getEventTime();   	
@@ -113,7 +115,8 @@ public class GameSceneEventsController {
         {
         	int choosenMagic=sceneHolder.magicBar.getChoosenIcon();
         	
-        	if((Math.abs(sceneHolder.startX-pSceneTouchEvent.getX())<5)&&(Math.abs(sceneHolder.startY-pSceneTouchEvent.getY())<5))
+        	if((Math.abs(Math.abs(sceneHolder.startX-pSceneTouchEvent.getX())-Math.abs(sceneHolder.cameraX-sceneHolder.camera.getCenterX()))<5)
+        			&&(Math.abs(Math.abs(sceneHolder.startY-pSceneTouchEvent.getY())-Math.abs(sceneHolder.cameraY-sceneHolder.camera.getCenterY()))<5))
         	{
         		sceneHolder.player.setDest(sceneHolder.startX, sceneHolder.startY);
         	}

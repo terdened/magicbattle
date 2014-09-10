@@ -61,6 +61,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public float yLastWall=0;
 	public float startX=0;
 	public float startY=0;
+
+	public float cameraX=0;
+	public float cameraY=0;
 	public float lastX=0;
 	public float lastY=0;
 	public float nowX=0;

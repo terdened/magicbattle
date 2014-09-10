@@ -205,8 +205,8 @@ public class ResourcesManager
 	    	whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/whole.png", 4, 3); 
 			   
 	    	gamebkg_region = new ITextureRegion[2];
-		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/1Background.png");
-		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/1Background.png");
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/dungeon_1.png");
+		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/dungeon_1.png");
 		    
 	    	eye_region = new PlayerRegion();
 	    	eye_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
@@ -241,7 +241,7 @@ public class ResourcesManager
 		    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/whole.png", 4, 3); 
 		   
 	    	gamebkg_region = new ITextureRegion[1];
-		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/2Background.png");
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/dungeon_1.png");
 		    
 		    bat_region = new PlayerRegion();
 	    	bat_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Bat.png", 6, 3);
@@ -271,9 +271,9 @@ public class ResourcesManager
 		    tree_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/tree.png", 1, 1); 
 		    
 	    	gamebkg_region = new ITextureRegion[3];
-		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/3Background_3.png");
-		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/3Background_2.png");
-		    gamebkg_region[2] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/3Background_1.png");
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_1.png");
+		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_2.png");
+		    gamebkg_region[2] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_3.png");
 	    	
 	    	spider_region = new PlayerRegion();	    	
 	    	spider_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Spider.png", 6, 3);	
@@ -288,6 +288,30 @@ public class ResourcesManager
 	    	plant_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
 		
 	   }
+	    else
+	    if(level.equals("5"))
+	    {
+	    	stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
+		    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/swamp.png", 4, 3); 
+		   
+	    	gamebkg_region = new ITextureRegion[2];
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/swamp_1.png");
+		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/swamp_1.png");
+		    
+	    	eye_region = new PlayerRegion();
+	    	eye_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Eye.png", 6, 3);	
+	    	eye_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	eye_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	eye_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	    	worm_region = new PlayerRegion();	    	
+	    	worm_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Worm.png", 6, 3);	
+	    	worm_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	worm_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	worm_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+
+	   }
+		    
 	    
 	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
 	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
