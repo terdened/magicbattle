@@ -98,6 +98,8 @@ public class Bulet extends Sprite
     {
         super.onManagedUpdate(pSecondsElapsed);
         
+        if(mScene.mGameState=="game")
+		{
         removeControl();
         
         int l=mScene.wall.size();
@@ -162,6 +164,7 @@ public class Bulet extends Sprite
 			
 			setX(mFinalX);
 			setY(mFinalY);
+		}
 		}
     }
 	

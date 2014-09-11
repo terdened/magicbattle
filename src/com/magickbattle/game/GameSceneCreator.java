@@ -117,7 +117,16 @@ public class GameSceneCreator {
 	
 	public void createPhysics()
 	{
-		sceneHolder.physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, 0), false); 
+		sceneHolder.physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, 0), false)
+		{
+			@Override
+			public
+			void onUpdate(float pSecondsElapsed)
+			{
+				if(sceneHolder.mGameState=="game")
+					super.onUpdate(pSecondsElapsed);
+			}
+		}; 
 		sceneHolder.registerUpdateHandler(sceneHolder.physicsWorld);
 	}
 

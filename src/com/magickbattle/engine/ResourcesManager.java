@@ -94,6 +94,13 @@ public class ResourcesManager
 	public ITextureRegion earthElementButton;
 	public ITextureRegion windElementButton;
 	public ITextureRegion backButton;
+	
+	public ITextureRegion pauseMenuBackground;
+	public ITextureRegion pauseMenuResumeButton;
+	public ITextureRegion pauseMenuGoToMenuButton;
+	public ITextureRegion pauseMenuRestartButton;
+	public ITextureRegion pauseMenuNextLevelButton;
+	
     public Engine engine;
     public GameActivity activity;
     public BoundCamera camera;
@@ -170,28 +177,28 @@ public class ResourcesManager
 	    player_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 6, 3);
 	    edge_region=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "levels/edge.png");
 	    
-	    if(element=="water")
+	    if(element.equals("water"))
 	    {
 	    	player_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWater.png", 6, 3);
 	    	player_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
 	    	player_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
 	    	player_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1);   
 	    }
-	    if(element=="fire")
+	    if(element.equals("fire"))
 	    {
 	    	player_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerFire.png", 6, 3);
 	    	player_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/fire_bulet.png");
 	    	player_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/fireWall.png", 8, 1);
 	    	player_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/fireTail.png", 8, 1);   
 	     }
-	    if(element=="earth")
+	    if(element.equals("earth"))
 	    {
 	    	player_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerEarth.png", 6, 3);
 	    	player_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/earth_bulet.png");
 	    	player_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/earthWall.png", 8, 1);
 	    	player_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/earthTail.png", 8, 1);   
 	    }
-	    if(element=="wind")
+	    if(element.equals("wind"))
 	    {
 	    	player_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/playerWind.png", 6, 3);
 	    	player_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/wind_bulet.png");
@@ -289,6 +296,31 @@ public class ResourcesManager
 		
 	   }
 	    else
+	    if(level.equals("4"))
+	    {
+	    	stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
+		    whole_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/river.png", 4, 3); 
+		    tree_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/tree.png", 1, 1); 
+		    
+	    	gamebkg_region = new ITextureRegion[3];
+		    gamebkg_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_1.png");
+		    gamebkg_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_2.png");
+		    gamebkg_region[2] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "levels/backgrounds/forest_3.png");
+	    	
+	    	spider_region = new PlayerRegion();	    	
+	    	spider_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Spider.png", 6, 3);	
+	    	spider_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/water_bulet.png");
+	    	spider_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	spider_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	    	plant_region = new PlayerRegion();	    	
+	    	plant_region.mPlayerRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "characters/Plant.png", 6, 3);	
+	    	plant_region.mBuletRegion=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "magics/earth_bulet.png");
+	    	plant_region.mWallRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "magics/waterWall.png", 8, 1);
+	    	plant_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
+		
+	    }
+	    else
 	    if(level.equals("5"))
 	    {
 	    	stone_region=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "levels/stone.png", 1, 1);
@@ -311,7 +343,6 @@ public class ResourcesManager
 	    	worm_region.mTailRegion=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/waterTail.png", 8, 1); 
 
 	   }
-		    
 	    
 	    dark_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadow.png", 8, 1);
 	    light_shadow=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "effects/shadowLight.png", 8, 1);
@@ -333,7 +364,14 @@ public class ResourcesManager
 		nature_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/natureicon.png", 2, 1);
 		buf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/buficon.png", 2, 1);
 		debuf_icon=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "icons/debuficon.png", 2, 1);
-		 
+		
+
+		pauseMenuBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "pauseMenu/background.png");
+		pauseMenuResumeButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "pauseMenu/resumeButton.png");
+		pauseMenuGoToMenuButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "pauseMenu/mainMenuButton.png");
+		pauseMenuRestartButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "pauseMenu/restartButton.png");
+		pauseMenuNextLevelButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "pauseMenu/nextLevelButton.png");
+		
 	    try 
 	    {
 	        this.mGameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));

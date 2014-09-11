@@ -129,24 +129,27 @@ public abstract class Enemy extends Player
 	@Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) 
     {
-    	if (pSceneTouchEvent.isActionDown())
-        {
-    		mScene.touchEnemy=true;
-        }
-    	
-        if (pSceneTouchEvent.isActionUp())
-        {
-        	if(mScene.touchEnemy)
-        	{
-        		float k=mScene.player.getMana(mScene.player.playerMagic.debufCost);
-        		if(k>0.3)
-        		this.setBuf(mScene.player.playerMagic.debufPower, 
-        				(long)(mScene.player.playerMagic.debufTime*k),
-        				mScene.player.playerMagic.debufType);
-        	}
-        	mScene.freeEnemy=true;
-        	mScene.touchEnemy=false;
-        }
+		if(mScene.mGameState=="game")
+		{
+	    	if (pSceneTouchEvent.isActionDown())
+	        {
+	    		mScene.touchEnemy=true;
+	        }
+	    	
+	        if (pSceneTouchEvent.isActionUp())
+	        {
+	        	if(mScene.touchEnemy)
+	        	{
+	        		float k=mScene.player.getMana(mScene.player.playerMagic.debufCost);
+	        		if(k>0.3)
+	        		this.setBuf(mScene.player.playerMagic.debufPower, 
+	        				(long)(mScene.player.playerMagic.debufTime*k),
+	        				mScene.player.playerMagic.debufType);
+	        	}
+	        	mScene.freeEnemy=true;
+	        	mScene.touchEnemy=false;
+	        }
+		}
         return true;
     }
 	
@@ -154,20 +157,22 @@ public abstract class Enemy extends Player
     protected void onManagedUpdate(float pSecondsElapsed) 
 	{
         super.onManagedUpdate(pSecondsElapsed);
-        
-        if(getIsDead())
-        {
-        	mScene.mEnemiesToRemove.add(this);
-        }
-        else
-        {
-            if(!isEnemyBusy())
-        	{
-        		this.mAI.update();
-        	}
-
-        	mIsAttacked=false;
-        }
+        if(mScene.mGameState=="game")
+		{
+	        if(getIsDead())
+	        {
+	        	mScene.mEnemiesToRemove.add(this);
+	        }
+	        else
+	        {
+	            if(!isEnemyBusy())
+	        	{
+	        		this.mAI.update();
+	        	}
+	
+	        	mIsAttacked=false;
+	        }
+		}
     	
     }
 }

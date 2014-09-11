@@ -81,18 +81,21 @@ public class EnviromentObject extends AnimatedSprite{
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) 
     {
-        super.onManagedUpdate(pSecondsElapsed);
-        if(mWindCollision)
+		if(mScene.mGameState=="game")
 		{
-			setX(getX()-mScene.weather.wind.x);
-			setY(getY()-mScene.weather.wind.y);
+	        super.onManagedUpdate(pSecondsElapsed);
+	        if(mWindCollision)
+			{
+				setX(getX()-mScene.weather.wind.x);
+				setY(getY()-mScene.weather.wind.y);
+			}
+			
+			
+			mLifeTime--;
+			
+			if(mLifeTime<=0)
+				mIsDestroy=true;
 		}
-		
-		
-		mLifeTime--;
-		
-		if(mLifeTime<=0)
-			mIsDestroy=true;
     }
 	
 	/*

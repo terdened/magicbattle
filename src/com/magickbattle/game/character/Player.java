@@ -106,10 +106,13 @@ public abstract class Player extends AnimatedSprite
     		@Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) 
             {
-                if (pSceneTouchEvent.isActionDown())
-                {
-                    touchPlayerShadow=true;
-                }
+    			if(mScene.mGameState=="game")
+    	 		{
+	                if (pSceneTouchEvent.isActionDown())
+	                {
+	                    touchPlayerShadow=true;
+	                }
+    	 		}
                 return true;
             };
     	};
@@ -139,8 +142,11 @@ public abstract class Player extends AnimatedSprite
 	        @Override
 	        public void onUpdate(float pSecondsElapsed)
 	        {
-	            super.onUpdate(pSecondsElapsed);
-	            camera.onUpdate(0.1f);                   
+	        	if(mScene.mGameState=="game")
+	        	{
+		            super.onUpdate(pSecondsElapsed);
+		            camera.onUpdate(0.1f); 
+	        	}
 	        }
 	    });
 
@@ -419,31 +425,34 @@ public abstract class Player extends AnimatedSprite
       */
 	 public void attacked(float damage)
 	 {
-		 health-=damage;
-		
-		 if(health<=0)
+		 if(health>0)
 		 {
-			 body.setLinearVelocity(0,0);
-			 this.speedX=0;
-			 this.speedY=0;
-			 destinationX=-100;
-		     destinationY=-100;
-			 this.dieAnimation();
-			 isDead=true;
-		 }
-		 
-		 if(health>maxHealth)
-			 health=maxHealth;
-		 else
-		 {
-			 if(Math.abs(damage)>=5)
+			 health-=damage;
+			
+			 if(health<=0)
 			 {
-				 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,String.valueOf(-damage));
-				 tempText.add(temp);
+				 body.setLinearVelocity(0,0);
+				 this.speedX=0;
+				 this.speedY=0;
+				 destinationX=-100;
+			     destinationY=-100;
+				 this.dieAnimation();
+				 isDead=true;
 			 }
+			 
+			 if(health>maxHealth)
+				 health=maxHealth;
+			 else
+			 {
+				 if(Math.abs(damage)>=5)
+				 {
+					 TextInformHolder temp = new TextInformHolder(this.getX(),this.getY(),100,String.valueOf(-damage));
+					 tempText.add(temp);
+				 }
+			 }
+			 
+			 mIsAttacked=true;
 		 }
-		 
-		 mIsAttacked=true;
 		 
 	 }
 	 
@@ -484,20 +493,27 @@ public abstract class Player extends AnimatedSprite
 	 @Override
      protected void onManagedUpdate(float pSecondsElapsed) 
      {
-         super.onManagedUpdate(pSecondsElapsed);
+		 if(mScene.mGameState=="game")
+ 		 {
+			 super.onManagedUpdate(pSecondsElapsed);
         
-         if(!getIsDead())
-		 {		        	 
-			 fillMana();
-			 move();
-			 updateEffects(mScene.gameHUD);
-			 
-			
-			 if(tempText.size()>0)
-			 {
-				 mScene.addTextList(tempText,getWidth());
-				 tempText=new LinkedList<TextInformHolder>();
+	         if(!getIsDead())
+			 {		        	 
+				 fillMana();
+				 move();
+				 updateEffects(mScene.gameHUD);
+				 
+				
+				 if(tempText.size()>0)
+				 {
+					 mScene.addTextList(tempText,getWidth());
+					 tempText=new LinkedList<TextInformHolder>();
+				 }
 			 }
-		 }
+	         else
+	         {
+	        	 mScene.die();
+	         }
+         }
      }
 }

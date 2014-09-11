@@ -32,6 +32,7 @@ import com.magickbattle.game.magick.Bulet;
 import com.magickbattle.game.magick.MagicParser;
 import com.magickbattle.game.magick.PlayerMagic;
 import com.magickbattle.game.magick.Wall;
+import com.magickbattle.game.menu.PauseMenu;
 
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener 
@@ -86,6 +87,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	public LinkedList<Bulet> mBuletToRemove;
 	public Entity mTopLayer;
 	public Entity mMagicLayer;
+	
+	public String mGameState;
+	
+	public PauseMenu mPauseMenu;
 	//End variables
 	
 	public void addTextList(LinkedList<TextInformHolder> tempList,float width)
@@ -139,12 +144,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 		this.attachChild(mMagicLayer);
 		this.attachChild(mTopLayer);
 		
+		mPauseMenu = new PauseMenu(camera, vbom, this);
+		mPauseMenu.createMenuChildScene(camera);
+		this.setChildScene(mPauseMenu);
+		
+		
+		mGameState="game";
+
+		mPauseMenu.updateMenuChildScene();
+		
 	}
 	
 	private void loadLevel(int levelID)
 	{
 		gameSceneLoader.loadLevel(levelID);
-		int a=0;
 	}
 
     @Override
@@ -179,8 +192,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     @Override
     public void onBackKeyPressed()
     {
-    	disposeScene();
-    	SceneManager.getInstance().loadPlayerMenuScene(engine);
+    	if(mGameState=="game")
+    		pauseGame();
+    	else
+    	if(mGameState=="pause")
+    		resumeGame();
     }
     
     @Override
@@ -242,6 +258,57 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	mMagicLayer.detachChild(pBulet);
 		bulet.remove(pBulet);
 		buletCount--;
+    }
+    
+    public void pauseGame()
+    {
+    	mGameState = "pause";
+    	mPauseMenu.updateMenuChildScene();
+    }
+    
+    public void resumeGame()
+    {
+    	mGameState = "game";
+    	mPauseMenu.updateMenuChildScene();
+    }
+    
+    public void die()
+    {
+    	if(this.player.getIsDead())
+    	{
+    		mGameState = "die";
+    		mPauseMenu.updateMenuChildScene();
+    	}
+    }
+    
+    public void win()
+    {
+    	if(!this.player.getIsDead())
+    	{
+    		mGameState = "win";
+    		mPauseMenu.updateMenuChildScene();
+    	}
+    }
+    
+    public void toMainMenu()
+    {
+    	disposeScene();
+    	SceneManager.getInstance().loadPlayerMenuScene(engine);
+    }
+    
+    public void restart()
+    {
+    	disposeScene();
+    	SceneManager.getInstance().loadGameScene(engine, player.playerMagic.element, levelName);
+    }
+    
+    public void nextLevel()
+    {
+    	disposeScene();
+    	int nextLevel = Integer.parseInt(levelName)+1;
+    	if(nextLevel > 5)
+    		nextLevel = 5;
+    	SceneManager.getInstance().loadNextGameScene(engine, player.playerMagic.element, String.valueOf(nextLevel));
     }
     
 }

@@ -3,9 +3,6 @@
 	<object x="0" y="0" rotation="0" type="stone" value="0"/>
 	<object x="1" y="0" rotation="0" type="stone" value="0"/>
 	<object x="2" y="0" rotation="0" type="stone" value="0"/>
-	<object x="3" y="0" rotation="0" type="stone" value="0"/>
-	<object x="4" y="0" rotation="0" type="stone" value="0"/>
-	<object x="5" y="0" rotation="0" type="stone" value="0"/>
 	<object x="6" y="0" rotation="0" type="stone" value="0"/>
 	<object x="7" y="0" rotation="0" type="stone" value="0"/>
 	<object x="8" y="0" rotation="0" type="stone" value="0"/>
@@ -68,16 +65,10 @@
 	<object x="0" y="28" rotation="0" type="stone" value="0"/>
 	<object x="1" y="4" rotation="0" type="whole" value="7"/>
 	<object x="2" y="4" rotation="0" type="whole" value="0"/>
-	<object x="3" y="4" rotation="0" type="whole" value="0"/>
-	<object x="4" y="4" rotation="0" type="whole" value="0"/>
-	<object x="5" y="4" rotation="0" type="whole" value="0"/>
 	<object x="6" y="4" rotation="0" type="whole" value="0"/>
 	<object x="7" y="4" rotation="0" type="whole" value="4"/>
 	<object x="1" y="5" rotation="0" type="whole" value="6"/>
 	<object x="2" y="5" rotation="0" type="whole" value="2"/>
-	<object x="3" y="5" rotation="0" type="whole" value="2"/>
-	<object x="4" y="5" rotation="0" type="whole" value="2"/>
-	<object x="5" y="5" rotation="0" type="whole" value="2"/>
 	<object x="6" y="5" rotation="0" type="whole" value="2"/>
 	<object x="7" y="5" rotation="0" type="whole" value="5"/>
 	

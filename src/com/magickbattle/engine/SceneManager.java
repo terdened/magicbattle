@@ -155,6 +155,27 @@ public class SceneManager
         }));
     }
     
+    public void loadNextGameScene(final Engine mEngine, final String Element, String Level)
+    {
+    	
+        setScene(loadingScene);
+        ResourcesManager.getInstance().unloadGameTextures();
+        this.element=Element;
+        this.level=Level;
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+            	String tempElement = element;
+            	String tempLevel = level;
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadGameResources(tempElement,tempLevel);
+                gameScene = new GameScene(tempElement,tempLevel);
+                setScene(gameScene);
+            }
+        }));
+    }
+    
     public void loadMenuScene(final Engine mEngine)
     {
         setScene(loadingScene);

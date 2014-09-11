@@ -140,15 +140,19 @@ public class Wall extends AnimatedSprite{
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) 
 	{
+		if(mScene.mGameState=="game")
+		{
 		super.onManagedUpdate(pSecondsElapsed);
 		
-		if(isDestroy())
-		{
-			mScene.mWallToRemove.add(this);
-		}
-		else
-		{
-			updateWall();
+		
+			if(isDestroy())
+			{
+				mScene.mWallToRemove.add(this);
+			}
+			else
+			{
+				updateWall();
+			}
 		}
 	}
 }
